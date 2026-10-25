@@ -1,8 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { config } from '../data/profile';
 
 export default function Portrait() {
   const [failed, setFailed] = useState(false);
+  const imgRef = useRef(null);
+
+  useEffect(() => {
+    const img = imgRef.current;
+    if (img && img.complete && img.naturalWidth === 0) setFailed(true);
+  }, []);
 
   return (
     <div className="portrait" data-reveal="">
@@ -15,6 +21,7 @@ export default function Portrait() {
             <div className="portrait-empty">Add the portrait at public{config.portrait}</div>
           ) : (
             <img
+              ref={imgRef}
               className="portrait-img"
               src={config.portrait}
               alt="Portrait of Pushpendra Singh"

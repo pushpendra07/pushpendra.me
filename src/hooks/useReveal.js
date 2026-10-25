@@ -10,8 +10,9 @@ export default function useReveal(rootRef) {
     const timers = [];
     const els = root.querySelectorAll('[data-reveal]');
 
-    els.forEach((el) => {
-      if (el.getBoundingClientRect().top < window.innerHeight * 0.9) return;
+    const fold = window.innerHeight * 0.9;
+    const below = Array.from(els).filter((el) => el.getBoundingClientRect().top >= fold);
+    below.forEach((el) => {
       const d = +(el.getAttribute('data-delay') || 0);
       el.style.opacity = '0';
       el.style.transform = 'translateY(28px)';

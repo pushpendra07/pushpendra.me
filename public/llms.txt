@@ -1,0 +1,19 @@
+# Pushpendra Singh — Adobe Commerce Developer
+
+> Adobe Certified Expert and Senior Software Developer with tech-lead responsibilities, with 12+ years building enterprise Adobe Commerce / Magento 2 platforms for retailers in the UAE, Kuwait, Saudi Arabia, Lebanon, Australia, Russia and the USA.
+
+## Profile
+
+- [Portfolio](https://pushpendra.me/): experience, client projects, skills and certifications
+- [Resume (PDF)](https://pushpendra.me/Pushpendra-Singh-Resume.pdf): full CV
+- [LinkedIn](https://www.linkedin.com/in/pushpendra07/)
+
+## Expertise
+
+- Adobe Commerce Cloud, on-premise and Magento Open Source; custom modules, MSI, checkout and payments
+- ERP and third-party integrations: SAP, Microsoft Dynamics AX, Talon.One, RabbitMQ, REST, GraphQL
+- Headless commerce, performance (Redis, Varnish, Fastly, New Relic) and security hardening
+
+## Contact
+
+- Email: pushpendra07@yahoo.com
