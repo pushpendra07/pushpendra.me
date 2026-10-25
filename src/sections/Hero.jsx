@@ -1,0 +1,73 @@
+import { useRef } from 'react';
+import HeroVisual from '../components/HeroVisual';
+import { externalProps, getLinks } from '../lib/links';
+import { scrollToHash } from '../lib/scroll';
+
+export default function Hero() {
+  const heroRef = useRef(null);
+  const { linkedin, github, emailHref, email, resume } = getLinks();
+  const socials = [
+    { label: 'in/LinkedIn', aria: 'LinkedIn profile', title: linkedin.external ? 'LinkedIn' : 'LinkedIn URL not set yet', ...linkedin },
+    github.external && { label: 'gh/GitHub', aria: 'GitHub profile', title: 'GitHub', ...github },
+    { label: '@/Email', aria: 'Send an email', title: email || 'Email not set yet', href: emailHref, external: false },
+  ].filter(Boolean);
+
+  return (
+    <section id="home" ref={heroRef} className="hero">
+      <div className="hero-bg" aria-hidden="true">
+        <div className="blob blob--1" />
+        <div className="blob blob--2" />
+        <div className="blob blob--3" />
+        <div className="hero-dots" />
+        <div className="hero-fade" />
+      </div>
+
+      <div className="hero-grid">
+        <div className="hero-copy">
+          <div className="availability">
+            <span className="availability-dot" />
+            Open to senior Magento &amp; Adobe Commerce roles
+          </div>
+          <div className="heading">
+            <p className="hero-hi">Hi, I&apos;m Pushpendra Singh.</p>
+            <h1 className="hero-title">
+              I build <span className="gradient-text">scalable commerce</span> experiences.
+            </h1>
+            <p className="hero-role">Adobe Certified Expert · Senior Adobe Commerce Developer</p>
+          </div>
+          <p className="hero-lead">
+            12+ years building enterprise Adobe Commerce platforms for retailers across the UAE, Kuwait, Saudi
+            Arabia, Lebanon, Australia, Russia and the USA — custom modules, ERP integrations, headless
+            commerce and performance work that holds up in production.
+          </p>
+          <div className="hero-ctas">
+            <a href="#contact" onClick={scrollToHash} className="btn-primary">
+              Let&apos;s Talk <span aria-hidden="true">→</span>
+            </a>
+            <a href={resume.href} download={resume.download} onClick={scrollToHash} className="btn-ghost">
+              {resume.heroLabel}
+            </a>
+          </div>
+          <ul className="socials">
+            {socials.map((s) => (
+              <li key={s.label}>
+                <a
+                  href={s.href}
+                  onClick={scrollToHash}
+                  aria-label={s.aria}
+                  title={s.title}
+                  className="social"
+                  {...externalProps(s.external)}
+                >
+                  {s.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <HeroVisual heroRef={heroRef} />
+      </div>
+    </section>
+  );
+}
