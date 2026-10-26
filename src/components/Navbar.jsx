@@ -37,9 +37,10 @@ export default function Navbar({ active, base = '' }) {
     <header className={headerClass}>
       <span ref={barRef} className="nav-progress" aria-hidden="true" />
       <nav className="nav" aria-label="Primary">
-        <a href={`${base}#home`} onClick={go} className="brand" aria-label="Pushpendra Singh — home">
-          <span className="brand-mark">&lt;ps/&gt;</span>
+        <a href={`${base}#home`} onClick={go} className="brand">
+          <span className="brand-mark" aria-hidden="true">&lt;ps/&gt;</span>
           <span className="brand-name">Pushpendra Singh</span>
+          <span className="sr-only"> — home</span>
         </a>
 
         <div className="nav-right">
