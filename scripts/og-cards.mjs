@@ -1,4 +1,5 @@
-// Generates the 1200×630 social preview card for each case study into public/og/<public slug>.jpg.
+// Generates the 1200×630 social preview cards: public/og/home.jpg for the home page and
+// public/og/<public slug>.jpg for each case study.
 // Run with `npm run og` after changing project titles, tags or platforms, then commit the
 // images. Needs Google Chrome (headless screenshot) and macOS `sips` (PNG → JPEG).
 import { execFileSync } from 'node:child_process';
@@ -12,10 +13,11 @@ import { clientName, publicSlug } from '../src/lib/projects.js';
 const CHROME = process.env.CHROME ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const out = resolve('public/og');
 const fonts = pathToFileURL(resolve('public/fonts')).href;
+const portrait = pathToFileURL(resolve('public/images/portrait-760.jpg')).href;
 const tmp = mkdtempSync(join(tmpdir(), 'og-'));
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
-const card = (pj) => `<!doctype html><html><head><meta charset="utf-8"><style>
+const card = ({ eyebrow, title, meta, tags, photo }) => `<!doctype html><html><head><meta charset="utf-8"><style>
 @font-face { font-family: 'Space Grotesk'; src: url('${fonts}/space-grotesk.woff2') format('woff2'); font-weight: 100 900; }
 @font-face { font-family: 'DM Sans'; src: url('${fonts}/dm-sans.woff2') format('woff2'); font-weight: 100 900; }
 @font-face { font-family: 'JetBrains Mono'; src: url('${fonts}/jetbrains-mono.woff2') format('woff2'); font-weight: 100 900; }
@@ -34,23 +36,44 @@ h1 { position: relative; margin-top: 18px; max-width: 900px; font-family: 'Space
 .meta { position: relative; margin-top: 22px; font-size: 26px; color: #b9b6cc; }
 .tags { position: absolute; left: 72px; bottom: 64px; display: flex; gap: 10px; }
 .tag { font-family: 'JetBrains Mono'; font-size: 18px; padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(167,139,250,.35); color: #ddd6fe; background: rgba(139,92,246,.1); }
+.has-photo .meta { max-width: 660px; }
+.photo { position: absolute; right: 80px; top: 118px; width: 300px; height: 360px; border-radius: 28px; object-fit: cover; object-position: 50% 22%;
+  border: 1px solid rgba(167,139,250,.45); box-shadow: 0 30px 80px -30px rgba(124,58,237,.7); }
 .url { position: absolute; right: 72px; bottom: 72px; font-family: 'JetBrains Mono'; font-size: 18px; color: #8f8daa; }
-</style></head><body>
+</style></head><body${photo ? ' class="has-photo"' : ''}>
 <div class="dots"></div><div class="orbit"></div><div class="orbit two"></div>
 <div class="brand"><span class="mark">&lt;ps/&gt;</span>Pushpendra Singh</div>
-<p class="eyebrow">Case study · ${esc(pj.category)}</p>
-<h1>${esc(clientName(pj))}</h1>
-<p class="meta">${esc([pj.platform, pj.place].filter(Boolean).join(' · '))}</p>
-<div class="tags">${pj.tags.slice(0, 4).map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+${photo ? `<img class="photo" src="${portrait}" alt="">` : ''}
+<p class="eyebrow">${esc(eyebrow)}</p>
+<h1>${esc(title)}</h1>
+<p class="meta">${esc(meta)}</p>
+<div class="tags">${tags.slice(0, 4).map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>
 <span class="url">pushpendra.me</span>
 </body></html>`;
 
+const cards = [
+  {
+    slug: 'home',
+    photo: true,
+    eyebrow: 'Adobe Certified Expert',
+    title: 'Pushpendra Singh',
+    meta: 'Full-Stack Developer & Adobe Commerce Solution Architect · 12+ years',
+    tags: ['Available immediately', 'Adobe Commerce', 'Magento 2', 'Headless GraphQL'],
+  },
+  ...projects.map((pj) => ({
+    slug: publicSlug(pj),
+    eyebrow: `Case study · ${pj.category}`,
+    title: clientName(pj),
+    meta: [pj.platform, pj.place].filter(Boolean).join(' · '),
+    tags: pj.tags,
+  })),
+];
+
 mkdirSync(out, { recursive: true });
-for (const pj of projects) {
-  const slug = publicSlug(pj);
+for (const { slug, ...content } of cards) {
   const html = join(tmp, `${slug}.html`);
   const png = join(tmp, `${slug}.png`);
-  writeFileSync(html, card(pj));
+  writeFileSync(html, card(content));
   execFileSync(CHROME, ['--headless=new', '--disable-gpu', '--hide-scrollbars', '--force-device-scale-factor=1',
     '--window-size=1200,630', '--virtual-time-budget=2000', `--screenshot=${png}`, pathToFileURL(html).href], { stdio: 'ignore' });
   execFileSync('sips', ['-s', 'format', 'jpeg', '-s', 'formatOptions', '84', png, '--out', join(out, `${slug}.jpg`)], { stdio: 'ignore' });

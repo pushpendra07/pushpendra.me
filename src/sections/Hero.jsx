@@ -8,9 +8,9 @@ export default function Hero() {
   const heroRef = useRef(null);
   const { linkedin, github, emailHref, email, resume } = getLinks();
   const socials = [
-    { label: 'in/LinkedIn', aria: 'LinkedIn profile', title: linkedin.external ? 'LinkedIn' : 'LinkedIn URL not set yet', ...linkedin },
-    github.external && { label: 'gh/GitHub', aria: 'GitHub profile', title: 'GitHub', ...github },
-    { label: '@/Email', aria: 'Send an email', title: email || 'Email not set yet', href: emailHref, external: false },
+    { label: 'in/LinkedIn', title: linkedin.external ? 'LinkedIn' : 'LinkedIn URL not set yet', ...linkedin },
+    github.external && { label: 'gh/GitHub', title: 'GitHub', ...github },
+    { label: '@/Email', title: email || 'Email not set yet', href: emailHref, external: false },
   ].filter(Boolean);
 
   return (
@@ -55,12 +55,12 @@ export default function Hero() {
                 <a
                   href={s.href}
                   onClick={scrollToHash}
-                  aria-label={s.aria}
                   title={s.title}
                   className="social"
                   {...externalProps(s.external)}
                 >
-                  {s.label}
+                  {/* The "in/" style prefix is decoration; screen readers just hear the name. */}
+                  <span aria-hidden="true">{s.label.split('/')[0]}/</span>{s.label.split('/')[1]}
                 </a>
               </li>
             ))}
