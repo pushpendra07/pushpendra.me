@@ -972,24 +972,6 @@ main section[id] { scroll-margin-top: 64px; }
 .contact-or { margin: 4px 0 -8px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: #8a88a3; }
 @media (max-width: 560px) { .contact-form { grid-template-columns: 1fr; padding: 18px; } }
 
-/* ---------- Consent banner ---------- */
-.consent {
-  position: fixed; left: 24px; bottom: 24px; z-index: 60; max-width: 380px; padding: 18px 18px 16px; border-radius: 18px;
-  background: rgba(15, 17, 38, .94); border: 1px solid rgba(167, 139, 250, .3); color: #e8e6f3;
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 24px 60px -20px rgba(0, 0, 0, .8);
-  animation: ps-swap .4s var(--ease) both;
-}
-.consent p { margin: 0 0 14px; font-size: 14px; line-height: 1.55; color: #c9c6dc; }
-.consent-actions { display: flex; justify-content: flex-end; gap: 8px; }
-.consent-btn {
-  padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, .16); background: transparent; color: #e8e6f3;
-  font: 500 14px var(--font-body); cursor: pointer;
-}
-.consent-btn:hover { border-color: rgba(255, 255, 255, .35); }
-.consent-btn--primary { background: var(--violet); border-color: var(--violet); color: #fff; }
-.consent-btn--primary:hover { background: var(--violet-700); border-color: var(--violet-700); }
-@media (max-width: 560px) { .consent { left: 12px; right: 12px; bottom: 12px; max-width: none; } }
-
 /* ---------- Case study gallery ---------- */
 .cs-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 16px; }
 .cs-shot { margin: 0; border-radius: 18px; overflow: hidden; background: #fff; border: 1px solid #e6e3f2; }

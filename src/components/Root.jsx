@@ -1,9 +1,8 @@
 import { useRef } from 'react';
 import useReveal from '../hooks/useReveal';
 import BackToTop from './BackToTop';
-import ConsentBanner from './ConsentBanner';
 
-// Page wrapper shared by every page: scroll-reveal, back-to-top and the analytics consent banner.
+// Page wrapper shared by every page: scroll-reveal and the back-to-top button.
 export default function Root({ children }) {
   const rootRef = useRef(null);
   useReveal(rootRef);
@@ -11,7 +10,6 @@ export default function Root({ children }) {
     <div ref={rootRef} className="root">
       {children}
       <BackToTop />
-      <ConsentBanner />
     </div>
   );
 }
