@@ -3,7 +3,7 @@ export const config = {
   email: 'pushpendra07@yahoo.com',
   linkedinUrl: 'https://www.linkedin.com/in/pushpendra07/',
   // Optional — the GitHub links stay hidden until this is set.
-  githubUrl: '',
+  githubUrl: 'https://github.com/pushpendra07',
   // public/Pushpendra-Singh-Resume.pdf
   resumeReady: true,
   // Shows the amber "placeholder · to confirm" notes while content is unverified.

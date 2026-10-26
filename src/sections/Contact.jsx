@@ -21,18 +21,6 @@ export default function Contact() {
   const [copied, setCopied] = useState(false);
   const time = useLocalTime(config.timeZone);
 
-  // Builds the email in the visitor's own mail app; nothing is sent to or stored by this site.
-  const sendMessage = (e) => {
-    e.preventDefault();
-    const f = new FormData(e.currentTarget);
-    const name = f.get('name').trim();
-    const company = f.get('company').trim();
-    const from = company ? `${name}, ${company}` : name;
-    const subject = `${f.get('topic')} — ${from}`;
-    const body = `${f.get('message').trim()}\n\n— ${from}`;
-    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  };
-
   const copyEmail = async () => {
     try {
       await navigator.clipboard.writeText(email);
@@ -58,36 +46,6 @@ export default function Contact() {
         <ul className="available" aria-label="Available for" data-reveal="">
           {config.availableFor.map((a) => <li key={a}>{a}</li>)}
         </ul>
-        {email && (
-          <form className="contact-form" onSubmit={sendMessage} data-reveal="">
-            <div className="field">
-              <label htmlFor="cf-name">Your name</label>
-              <input id="cf-name" name="name" required autoComplete="name" />
-            </div>
-            <div className="field">
-              <label htmlFor="cf-company">Company <span>(optional)</span></label>
-              <input id="cf-company" name="company" autoComplete="organization" />
-            </div>
-            <div className="field field--wide">
-              <label htmlFor="cf-topic">What&apos;s it about?</label>
-              <select id="cf-topic" name="topic" defaultValue="A full-time role">
-                <option>A full-time role</option>
-                <option>Contract / freelance work</option>
-                <option>Adobe Commerce consulting</option>
-                <option>Something else</option>
-              </select>
-            </div>
-            <div className="field field--wide">
-              <label htmlFor="cf-message">Message</label>
-              <textarea id="cf-message" name="message" rows={4} required placeholder="A line or two about the role or project…" />
-            </div>
-            <div className="form-foot">
-              <button type="submit" className="btn-primary">Write the email <span aria-hidden="true">→</span></button>
-              <span className="form-note">Opens your email app with the message ready to send.</span>
-            </div>
-          </form>
-        )}
-        <p className="contact-or" data-reveal="">or reach me directly</p>
         <div className="contact-actions" data-reveal="">
           <span className="email-group">
             <a href={emailHref} onClick={scrollToHash} className="btn-white">{emailLabel}</a>

@@ -8,6 +8,7 @@
 - Case studies: one page per client project at https://pushpendra.me/projects/<slug>/ (e.g. [Grandiose Supermarket](https://pushpendra.me/projects/grandiose-supermarket/))
 - [Resume (PDF)](https://pushpendra.me/Pushpendra-Singh-Resume.pdf): full CV
 - [LinkedIn](https://www.linkedin.com/in/pushpendra07/)
+- [GitHub](https://github.com/pushpendra07)
 
 ## Expertise
 
