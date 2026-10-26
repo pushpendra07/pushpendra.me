@@ -14,7 +14,11 @@ export default function Certifications() {
           <div className="cert-list">
             {certs.map((c) => (
               <div key={c.n} className="cert" data-reveal="">
-                <span className="cert-icon"><TechIcon name={c.icon} color="currentColor" /></span>
+                {c.badge ? (
+                  <img src={c.badge} alt={`${c.title} badge`} className="cert-badge" width="64" height="64" loading="lazy" />
+                ) : (
+                  <span className="cert-icon"><TechIcon name={c.icon} color="currentColor" /></span>
+                )}
                 <h3 className="cert-title">{c.title}</h3>
                 <span className="cert-issuer">{c.issuer}</span>
                 <span className="cert-meta">{c.meta}</span>

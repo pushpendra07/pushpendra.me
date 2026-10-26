@@ -503,6 +503,7 @@ main section[id] { scroll-margin-top: 64px; }
   width: 40px; height: 40px; border-radius: 12px; background: #e6e1f7; display: grid; place-items: center;
   color: var(--violet-700);
 }
+.cert-badge { width: 64px; height: 64px; object-fit: contain; }
 .cert-title { margin: 0; font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--ink); }
 .cert-issuer { font-size: 14px; color: #6b6782; }
 .cert-meta { font-family: var(--font-mono); font-size: 12px; color: #6b6782; }

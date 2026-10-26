@@ -324,8 +324,8 @@ export const skills = [
 ];
 
 export const certs = [
-  { n: '01', icon: 'award', title: 'Adobe Certified Expert', issuer: 'Adobe Commerce Developer', meta: 'Adobe', verifyUrl: 'https://certification.adobe.com/credential/verify/0337ceaf-c351-4151-a1b6-dd9e93b6ba6e' },
-  { n: '02', icon: 'award', title: 'Adobe Certified Professional', issuer: 'Adobe Commerce Developer', meta: 'Adobe', verifyUrl: 'https://certification.adobe.com/credential/verify/a2be427f-cf35-4114-ab9c-5bdb4ca187a2' },
+  { n: '01', icon: 'award', title: 'Adobe Certified Expert', issuer: 'Adobe Commerce Developer', meta: 'Adobe', badge: '/images/certs/adobe-expert.webp', verifyUrl: 'https://certification.adobe.com/credential/verify/0337ceaf-c351-4151-a1b6-dd9e93b6ba6e' },
+  { n: '02', icon: 'award', title: 'Adobe Certified Professional', issuer: 'Adobe Commerce Developer', meta: 'Adobe', badge: '/images/certs/adobe-professional.webp', verifyUrl: 'https://certification.adobe.com/credential/verify/a2be427f-cf35-4114-ab9c-5bdb4ca187a2' },
   { n: '03', icon: 'star', title: 'Mountain Movers', issuer: 'Outstanding project delivery', meta: 'Award · Krish TechnoLabs' },
   { n: '04', icon: 'star', title: 'Best Team Player', issuer: 'Teamwork & collaboration', meta: 'Award · Sunarc Technologies' },
 ];
