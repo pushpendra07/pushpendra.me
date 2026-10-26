@@ -335,8 +335,8 @@ export const certs = [
 export const testimonials = [];
 
 export const education = [
-  { degree: 'Master of Computer Applications (MCA)', school: 'Jaipur National University, Jaipur', dates: '2013 — 2014' },
-  { degree: 'M.Sc. Information Technology', school: 'Maharaja Ganga Singh University, Bikaner', dates: '2011 — 2013' },
+  { degree: 'Master of Computer Applications (MCA)', short: 'MCA', school: 'Jaipur National University' },
+  { degree: 'M.Sc. Information Technology', short: 'M.Sc. IT', school: 'Maharaja Ganga Singh University' },
 ];
 
 // Hero editor snippets. Token kinds: k keyword, t type, f function, v variable, p punctuation.
