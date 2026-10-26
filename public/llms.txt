@@ -1,10 +1,11 @@
 # Pushpendra Singh — Adobe Commerce Developer
 
-> Adobe Certified Expert and Senior Software Developer with tech-lead responsibilities, with 12+ years building enterprise Adobe Commerce / Magento 2 platforms for retailers in the UAE, Kuwait, Saudi Arabia, Lebanon, Australia, Russia and the USA.
+> Adobe Certified Expert and senior Adobe Commerce developer (Senior Software Developer with tech-lead responsibilities at Krish TechnoLabs since Sep 2021), available to join immediately, with 12+ years building enterprise Adobe Commerce / Magento 2 platforms for retailers in the UAE, Kuwait, Saudi Arabia, Lebanon, Australia, Russia and the USA.
 
 ## Profile
 
 - [Portfolio](https://pushpendra.me/): experience, client projects, skills and certifications
+- Case studies: one page per client project at https://pushpendra.me/projects/<slug>/ (e.g. [Grandiose Supermarket](https://pushpendra.me/projects/grandiose-supermarket/))
 - [Resume (PDF)](https://pushpendra.me/Pushpendra-Singh-Resume.pdf): full CV
 - [LinkedIn](https://www.linkedin.com/in/pushpendra07/)
 

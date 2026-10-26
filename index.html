@@ -3,6 +3,23 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PBV4P35V2D"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      // Consent mode: analytics cookies wait for consent in the EEA, UK and Switzerland;
+      // a stored choice from the consent banner (src/components/ConsentBanner.jsx) applies everywhere.
+      gtag('consent', 'default', { analytics_storage: 'granted', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+      gtag('consent', 'default', { analytics_storage: 'denied', region: ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH'] });
+      try {
+        var choice = localStorage.getItem('analytics-consent');
+        if (choice) gtag('consent', 'update', { analytics_storage: choice });
+      } catch (e) {}
+      gtag('js', new Date());
+
+      gtag('config', 'G-PBV4P35V2D');
+    </script>
     <title>Pushpendra Singh — Adobe Certified Expert, Adobe Commerce Developer</title>
     <meta name="description" content="Pushpendra Singh — Adobe Certified Expert and senior Adobe Commerce / Magento 2 developer with 12+ years building enterprise e-commerce platforms, ERP integrations and headless commerce." />
     <link rel="canonical" href="https://pushpendra.me/" />
@@ -10,6 +27,11 @@
     <meta property="og:url" content="https://pushpendra.me/" />
     <meta property="og:title" content="Pushpendra Singh — Adobe Commerce Developer" />
     <meta property="og:description" content="Adobe Certified Expert with 12+ years building Adobe Commerce / Magento 2 platforms, ERP integrations and headless commerce." />
+    <meta property="og:image" content="https://pushpendra.me/images/portrait-760.jpg" />
+    <meta property="og:image:width" content="760" />
+    <meta property="og:image:height" content="912" />
+    <meta property="og:image:alt" content="Pushpendra Singh" />
+    <meta name="twitter:card" content="summary" />
     <meta name="theme-color" content="#06070d" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="/fonts/space-grotesk.woff2" as="font" type="font/woff2" crossorigin />

@@ -5,7 +5,7 @@ export default function Experience() {
     <section id="experience" className="experience">
       <div className="experience-inner">
         <div className="heading" data-reveal="" style={{ maxWidth: 680 }}>
-          <span className="eyebrow">02 — EXPERIENCE</span>
+          <span className="eyebrow">EXPERIENCE</span>
           <h2 className="h2">Where I&apos;ve built.</h2>
           {config.showPlaceholderNotes && (
             <p className="note">

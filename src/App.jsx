@@ -1,41 +1,9 @@
-import { useRef } from 'react';
-import BackToTop from './components/BackToTop';
-import Navbar from './components/Navbar';
-import { nav } from './data/profile';
-import useActiveSection from './hooks/useActiveSection';
-import useReveal from './hooks/useReveal';
-import About from './sections/About';
-import Certifications from './sections/Certifications';
-import Contact from './sections/Contact';
-import Experience from './sections/Experience';
-import Footer from './sections/Footer';
-import Hero from './sections/Hero';
-import Projects from './sections/Projects';
-import Skills from './sections/Skills';
-import Stats from './sections/Stats';
+import CaseStudyPage from './CaseStudyPage';
+import HomePage from './HomePage';
+import { findProject } from './lib/projects';
 
-const SECTION_IDS = nav.map(([id]) => id);
-
-export default function App() {
-  const rootRef = useRef(null);
-  const active = useActiveSection(SECTION_IDS);
-  useReveal(rootRef);
-
-  return (
-    <div ref={rootRef} className="root">
-      <Navbar active={active} />
-      <main>
-        <Hero />
-        <Stats />
-        <About />
-        <Experience />
-        <Projects />
-        <Skills />
-        <Certifications />
-        <Contact />
-      </main>
-      <Footer />
-      <BackToTop />
-    </div>
-  );
+// Server-side router for pre-rendering; the browser loads only the page it needs (main.jsx).
+export default function App({ path = '/' }) {
+  const project = findProject(path);
+  return project ? <CaseStudyPage project={project} /> : <HomePage />;
 }

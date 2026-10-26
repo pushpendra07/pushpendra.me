@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { nav } from '../data/profile';
 import { getLinks } from '../lib/links';
 import { scrollToHash } from '../lib/scroll';
@@ -6,14 +6,20 @@ import { scrollToHash } from '../lib/scroll';
 // Below this width the CSS swaps the link list for the menu button.
 const NARROW = 980;
 
-export default function Navbar({ active }) {
+// `base` prefixes the section links on pages other than home, e.g. '/' → '/#about'.
+export default function Navbar({ active, base = '' }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const barRef = useRef(null);
   const { resume } = getLinks();
 
   useEffect(() => {
     const onResize = () => { if (window.innerWidth >= NARROW) setMenuOpen(false); };
-    const onScroll = () => setScrolled(window.scrollY > 30);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 30);
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (barRef.current) barRef.current.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
+    };
     onScroll();
     window.addEventListener('resize', onResize);
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -29,8 +35,9 @@ export default function Navbar({ active }) {
 
   return (
     <header className={headerClass}>
+      <span ref={barRef} className="nav-progress" aria-hidden="true" />
       <nav className="nav" aria-label="Primary">
-        <a href="#home" onClick={go} className="brand" aria-label="Pushpendra Singh — home">
+        <a href={`${base}#home`} onClick={go} className="brand" aria-label="Pushpendra Singh — home">
           <span className="brand-mark">&lt;ps/&gt;</span>
           <span className="brand-name">Pushpendra Singh</span>
         </a>
@@ -40,7 +47,7 @@ export default function Navbar({ active }) {
             {nav.map(([id, label]) => (
               <li key={id}>
                 <a
-                  href={`#${id}`}
+                  href={`${base}#${id}`}
                   onClick={go}
                   className={`nav-link${active === id ? ' is-active' : ''}`}
                   aria-current={active === id ? 'true' : undefined}
@@ -71,7 +78,7 @@ export default function Navbar({ active }) {
         <ul>
           {nav.map(([id, label]) => (
             <li key={id}>
-              <a href={`#${id}`} onClick={go} className={`mobile-link${active === id ? ' is-active' : ''}`}>
+              <a href={`${base}#${id}`} onClick={go} className={`mobile-link${active === id ? ' is-active' : ''}`}>
                 {label}
               </a>
             </li>

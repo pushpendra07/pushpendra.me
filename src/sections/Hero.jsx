@@ -26,14 +26,14 @@ export default function Hero() {
         <div className="hero-copy">
           <div className="availability">
             <span className="availability-dot" />
-            Open to senior Magento &amp; Adobe Commerce roles
+            Available immediately · open to senior Adobe Commerce roles
           </div>
           <div className="heading">
             <p className="hero-hi">Hi, I&apos;m Pushpendra Singh.</p>
             <h1 className="hero-title">
               I build <span className="gradient-text">scalable commerce</span> experiences.
             </h1>
-            <p className="hero-role">Adobe Certified Expert · Senior Adobe Commerce Developer</p>
+            <p className="hero-role">Adobe Certified Expert · Full-Stack Developer &amp; Adobe Commerce Solution Architect</p>
           </div>
           <p className="hero-lead">
             12+ years building enterprise Adobe Commerce platforms for retailers across the UAE, Kuwait, Saudi
