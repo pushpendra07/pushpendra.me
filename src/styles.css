@@ -404,6 +404,14 @@ a:hover { color: var(--violet-300); }
 }
 .project-dl dt { font-family: var(--font-mono); font-size: 11px; color: var(--violet-400); text-transform: uppercase; letter-spacing: .05em; }
 .project-dl dd { margin: 4px 0 0; font-size: 14px; line-height: 1.55; color: #cfcce0; }
+.project-more summary {
+  cursor: pointer; width: fit-content; font-family: var(--font-mono); font-size: 12px;
+  letter-spacing: .05em; text-transform: uppercase; color: var(--violet-400);
+}
+.project-more summary:hover { color: #ddd6fe; }
+.project-more ul { margin: 12px 0 0; padding-left: 18px; display: grid; gap: 8px; }
+.project-more li { font-size: 13.5px; line-height: 1.55; color: #cfcce0; }
+.project-more li::marker { color: var(--violet-400); }
 .project .tags { margin-top: auto; }
 .tag-dark { font-family: var(--font-mono); font-size: 11.5px; padding: 4px 9px; border-radius: 7px; border: 1px solid rgba(167, 139, 250, .25); color: #ddd6fe; }
 .project-foot {
@@ -433,6 +441,9 @@ a:hover { color: var(--violet-300); }
   transition: background .25s, color .25s, border-color .25s, transform .25s;
 }
 .skill-item:hover { background: var(--ink); color: #fff; border-color: var(--ink); transform: translateY(-2px); }
+.skill-card--learning { background: transparent; border: 1px dashed #c4b5fd; }
+.skill-card--learning .skill-item { background: #fff; border-style: dashed; }
+.skill-note { margin: -8px 0 0; font-size: 13.5px; line-height: 1.5; color: #6b6782; }
 
 /* ---------- Certifications ---------- */
 .certs { background: #efedf8; color: var(--ink); padding: 110px 24px; }

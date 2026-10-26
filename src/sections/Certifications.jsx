@@ -6,7 +6,7 @@ export default function Certifications() {
       <div className="container certs-grid">
         <div className="heading" data-reveal="">
           <span className="eyebrow">05 — CERTIFICATIONS</span>
-          <h2 className="h2">Certified in Adobe Commerce.</h2>
+          <h2 className="h2">Certified and recognised.</h2>
           <ul className="education">
             {education.map((ed) => (
               <li key={ed.degree}>

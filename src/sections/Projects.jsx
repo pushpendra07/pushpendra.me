@@ -10,8 +10,8 @@ export default function Projects() {
             <h2 className="h2" style={{ color: '#fff' }}>Commerce problems, engineered properly.</h2>
           </div>
           <p className="projects-intro">
-            Selected client work across the Middle East, Australia, Russia and the USA — from omnichannel grocery
-            to headless PWA storefronts.
+            Twelve client platforms across the Middle East, Australia, Russia and the USA — from omnichannel grocery
+            to headless PWA storefronts and B2B quoting.
           </p>
         </div>
         <div className="project-grid">
@@ -27,6 +27,14 @@ export default function Projects() {
                 <div><dt>Problem</dt><dd>{pj.problem}</dd></div>
                 <div><dt>Solution</dt><dd>{pj.solution}</dd></div>
               </dl>
+              {pj.details && (
+                <details className="project-more">
+                  <summary>Full breakdown</summary>
+                  <ul>
+                    {pj.details.map((d) => <li key={d}>{d}</li>)}
+                  </ul>
+                </details>
+              )}
               <div className="tags">
                 {pj.tags.map((tg) => <span key={tg} className="tag-dark">{tg}</span>)}
               </div>
