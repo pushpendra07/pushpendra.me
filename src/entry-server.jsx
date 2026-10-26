@@ -28,6 +28,7 @@ const person = {
     name: `${c.title} — ${c.issuer}`,
     credentialCategory: 'certification',
     recognizedBy: { '@type': 'Organization', name: 'Adobe' },
+    ...(c.verifyUrl && { url: c.verifyUrl }),
   })),
   knowsAbout: skills.filter((sk) => !sk.learning).flatMap((sk) => sk.items).slice(0, 30),
 };
