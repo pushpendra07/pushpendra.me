@@ -57,7 +57,6 @@ a:hover { color: var(--violet-300); }
 @keyframes ps-spin { to { transform: rotate(360deg); } }
 @keyframes ps-drift1 { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(8%, 6%) scale(1.15); } }
 @keyframes ps-drift2 { 0%, 100% { transform: translate(0, 0) scale(1.1); } 50% { transform: translate(-10%, -4%) scale(.95); } }
-@keyframes ps-dots { to { transform: translate3d(44px, 22px, 0); } }
 @keyframes ps-pulse { 0% { transform: scale(1); opacity: .55; } 80%, 100% { transform: scale(3.25); opacity: 0; } }
 @keyframes ps-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 @keyframes ps-sway { 0%, 100% { transform: translate(0, 0) rotate(-2deg); } 50% { transform: translate(6px, -8px) rotate(-1deg); } }
@@ -188,16 +187,10 @@ main section[id] { scroll-margin-top: 64px; }
   background: radial-gradient(circle, rgba(34, 211, 238, .16), transparent 65%); filter: blur(30px);
   animation: ps-drift1 30s ease-in-out infinite reverse;
 }
-.hero-dots {
-  position: absolute; inset: 0;
-  -webkit-mask-image: radial-gradient(70% 60% at 65% 50%, #000 10%, transparent 75%);
-  mask-image: radial-gradient(70% 60% at 65% 50%, #000 10%, transparent 75%);
-  overflow: hidden;
-}
-.hero-dots::before {
-  content: ''; position: absolute; top: -22px; left: -44px; right: 0; bottom: 0;
-  background-image: radial-gradient(rgba(196, 181, 253, .22) 1px, transparent 1.2px); background-size: 22px 22px;
-  animation: ps-dots 14s linear infinite;
+.hero-canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  -webkit-mask-image: radial-gradient(120% 95% at 62% 45%, #000 45%, transparent 88%);
+  mask-image: radial-gradient(120% 95% at 62% 45%, #000 45%, transparent 88%);
 }
 .hero-fade { position: absolute; left: 0; right: 0; bottom: 0; height: 160px; background: linear-gradient(180deg, transparent, #05060b); }
 .hero-grid {
@@ -979,3 +972,16 @@ main section[id] { scroll-margin-top: 64px; }
 .cs-shot { margin: 0; border-radius: 18px; overflow: hidden; background: #fff; border: 1px solid #e6e3f2; }
 .cs-shot img { display: block; width: 100%; height: auto; }
 .cs-shot figcaption { padding: 12px 16px; font-size: 14px; color: #5a576e; }
+
+/* ---------- Hero headline: the gradient rises into an outlined word ---------- */
+@keyframes ps-water {
+  from { background-size: 100% 0%; -webkit-text-stroke-color: rgba(196, 181, 253, .65); }
+  85% { -webkit-text-stroke-color: rgba(196, 181, 253, .4); }
+  to { background-size: 100% 100%; -webkit-text-stroke-color: rgba(196, 181, 253, 0); }
+}
+.hero-title .gradient-text {
+  background-position: 0 100%; background-size: 100% 100%; background-repeat: no-repeat;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  -webkit-text-stroke: 1.5px rgba(196, 181, 253, 0);
+  animation: ps-water 2.4s cubic-bezier(.4, 0, .2, 1) .5s both;
+}

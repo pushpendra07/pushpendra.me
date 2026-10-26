@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import HeroCanvas from '../components/HeroCanvas';
 import HeroVisual from '../components/HeroVisual';
 import { externalProps, getLinks } from '../lib/links';
 import { scrollToHash } from '../lib/scroll';
@@ -18,7 +19,7 @@ export default function Hero() {
         <div className="blob blob--1" />
         <div className="blob blob--2" />
         <div className="blob blob--3" />
-        <div className="hero-dots" />
+        <HeroCanvas heroRef={heroRef} />
         <div className="hero-fade" />
       </div>
 
