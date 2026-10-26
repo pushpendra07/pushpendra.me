@@ -22,7 +22,7 @@ const person = {
   sameAs: [config.linkedinUrl, config.githubUrl].filter(Boolean),
   address: { '@type': 'PostalAddress', addressLocality: 'Bikaner', addressRegion: 'Rajasthan', addressCountry: 'IN' },
   worksFor: { '@type': 'Organization', name: experience[0].employer.split(' · ')[0] },
-  alumniOf: education.map((ed) => ({ '@type': 'CollegeOrUniversity', name: ed.school.split(',')[0] })),
+  alumniOf: education.map((ed) => ({ '@type': 'CollegeOrUniversity', name: ed.school })),
   hasCredential: certs.filter((c) => c.meta === 'Adobe').map((c) => ({
     '@type': 'EducationalOccupationalCredential',
     name: `${c.title} — ${c.issuer}`,
