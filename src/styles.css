@@ -208,6 +208,8 @@ main section[id] { scroll-margin-top: 64px; }
   content: ''; position: absolute; inset: 0; border-radius: 50%; background: #34d399;
   animation: ps-pulse 2.2s ease-out infinite;
 }
+.hero-heading { margin: 0; font-size: inherit; font-weight: 400; }
+.hero-heading > span { display: block; }
 .hero-hi { margin: 0; font-family: var(--font-display); font-size: 20px; color: #c9c6dc; }
 .hero-title {
   margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(44px, 6.4vw, 82px);

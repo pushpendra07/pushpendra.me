@@ -6,7 +6,7 @@ export default function Skills() {
       <div className="container section-stack">
         <div className="heading" data-reveal="" style={{ maxWidth: 640 }}>
           <span className="eyebrow">SKILLS</span>
-          <h2 className="h2">The toolkit.</h2>
+          <h2 className="h2">Magento, PHP and the rest of the toolkit.</h2>
         </div>
         <div className="skill-grid">
           {skills.map((sk, i) => (
