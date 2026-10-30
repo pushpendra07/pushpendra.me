@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { prefersReducedMotion } from '../hooks/useReducedMotion';
+import { getTheme, subscribe } from '../lib/theme';
 
 const GAP = 30; // grid spacing, px
 const REACH = 150; // pointer influence radius, px
@@ -8,8 +9,11 @@ const RIPPLE_SPEED = 0.38; // px per ms
 const RIPPLE_BAND = 42; // ring thickness, px
 const AMBIENT_EVERY = 3600; // ms between ripples that start on their own
 
-const VIOLET = [167, 139, 250];
-const CYAN = [103, 232, 249];
+// Dots run from `from` on the left to `to` on the right; deeper tones on the light theme.
+const PALETTES = {
+  dark: { from: [167, 139, 250], to: [103, 232, 249], idle: 'rgba(196, 181, 253, .13)', glow: '139, 92, 246' },
+  light: { from: [124, 58, 237], to: [8, 145, 178], idle: 'rgba(109, 40, 217, .14)', glow: '139, 92, 246' },
+};
 
 // Interactive dot grid behind the hero: dots near the pointer light up, lean in and
 // link together; ripples sweep across on their own and from every click or tap.
@@ -30,13 +34,14 @@ export default function HeroCanvas({ heroRef }) {
     let visible = true;
     let last = performance.now();
     let nextAmbient = last + 1200;
+    let palette = PALETTES[getTheme()];
 
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
       if (pointer.active) {
         const g = ctx.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, REACH * 1.7);
-        g.addColorStop(0, 'rgba(139, 92, 246, .16)');
-        g.addColorStop(1, 'rgba(139, 92, 246, 0)');
+        g.addColorStop(0, `rgba(${palette.glow}, .16)`);
+        g.addColorStop(1, `rgba(${palette.glow}, 0)`);
         ctx.fillStyle = g;
         ctx.fillRect(0, 0, w, h);
       }
@@ -65,7 +70,7 @@ export default function HeroCanvas({ heroRef }) {
 
         const x = d.x + ox;
         const y = d.y + oy;
-        ctx.fillStyle = d.glow > 0.04 ? `rgba(${d.rgb}, ${0.12 + d.glow * 0.7})` : 'rgba(196, 181, 253, .13)';
+        ctx.fillStyle = d.glow > 0.04 ? `rgba(${d.rgb}, ${0.12 + d.glow * 0.7})` : palette.idle;
         ctx.beginPath();
         ctx.arc(x, y, 1 + d.glow * 1.7, 0, Math.PI * 2);
         ctx.fill();
@@ -100,7 +105,7 @@ export default function HeroCanvas({ heroRef }) {
       for (let y = GAP / 2; y < h; y += GAP) {
         for (let x = GAP / 2; x < w; x += GAP) {
           const t = x / w; // violet on the left, cyan on the right
-          const rgb = VIOLET.map((v, i) => Math.round(v + (CYAN[i] - v) * t)).join(', ');
+          const rgb = palette.from.map((v, i) => Math.round(v + (palette.to[i] - v) * t)).join(', ');
           dots.push({ x, y, glow: 0, rgb });
         }
       }
@@ -144,7 +149,11 @@ export default function HeroCanvas({ heroRef }) {
     resize();
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
-    if (reduce) return () => ro.disconnect();
+    const unsubscribe = subscribe(() => {
+      palette = PALETTES[getTheme()];
+      resize();
+    });
+    if (reduce) return () => { ro.disconnect(); unsubscribe(); };
 
     const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; });
     io.observe(canvas);
@@ -155,6 +164,7 @@ export default function HeroCanvas({ heroRef }) {
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
+      unsubscribe();
       io.disconnect();
       hero.removeEventListener('pointermove', onMove);
       hero.removeEventListener('pointerleave', onLeave);

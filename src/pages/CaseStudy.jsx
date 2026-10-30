@@ -38,10 +38,10 @@ function Icon({ name }) {
   );
 }
 
-function SectionHead({ n, title, intro, dark = false }) {
+function SectionHead({ n, title, intro }) {
   return (
     <div className="heading cs-head" data-reveal="">
-      <span className={`eyebrow${dark ? ' eyebrow--dark' : ''}`}>{n}</span>
+      <span className="eyebrow">{n}</span>
       <h2 className="h2">{title}</h2>
       {intro && <p className="cs-intro">{intro}</p>}
     </div>
@@ -124,9 +124,9 @@ function DeepSections({ study, details }) {
       )}
 
       {arch && (
-        <section id="cs-architecture" className="cs-section cs-section--dark">
+        <section id="cs-architecture" className="cs-section cs-section--feature">
           <div className="cs-container cs-stack-sm">
-            <SectionHead n='ARCHITECTURE OVERVIEW' title={arch.title} intro={arch.intro} dark />
+            <SectionHead n='ARCHITECTURE OVERVIEW' title={arch.title} intro={arch.intro} />
             <div className="cs-diagram-frame" data-reveal="">
               <div className="cs-diagram-scroll"><ArchitectureDiagram data={arch} id="arch" /></div>
             </div>
@@ -209,10 +209,10 @@ function DeepSections({ study, details }) {
       )}
 
       {(study.challenges || diagrams.length > 0) && (
-        <section id="cs-challenges" className="cs-section cs-section--dark">
+        <section id="cs-challenges" className="cs-section cs-section--feature">
           <div className="cs-container cs-stack-sm">
             <SectionHead n='KEY TECHNICAL CHALLENGES'
-              title={study.challenges?.title ?? 'How it works.'} intro={study.challenges?.intro} dark />
+              title={study.challenges?.title ?? 'How it works.'} intro={study.challenges?.intro} />
             {study.challenges && (
               <ol className="cs-challenges">
                 {study.challenges.items.map(([title, problem, solution, result], i) => (
@@ -348,7 +348,7 @@ export default function CaseStudy({ project: pj }) {
         <div className="cs-hero-glow" aria-hidden="true" />
         <div className="cs-container cs-hero-inner">
           <a href="/#projects" className="cs-back">← All projects</a>
-          <span className="eyebrow eyebrow--dark">
+          <span className="eyebrow">
             {study ? 'ARCHITECTURE CASE STUDY' : 'CASE STUDY'}
           </span>
           <h1 className="cs-title">{clientName(pj)}</h1>

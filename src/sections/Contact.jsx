@@ -35,7 +35,7 @@ export default function Contact() {
     <section id="contact" className="contact">
       <div className="contact-glow" aria-hidden="true" />
       <div className="contact-inner">
-        <span className="eyebrow eyebrow--dark" data-reveal="">CONTACT</span>
+        <span className="eyebrow" data-reveal="">CONTACT</span>
         <h2 className="contact-title" data-reveal="">
           Let&apos;s build something <span className="gradient-text">solid.</span>
         </h2>

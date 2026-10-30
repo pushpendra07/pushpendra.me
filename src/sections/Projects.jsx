@@ -24,8 +24,8 @@ export default function Projects() {
       <div className="container section-stack">
         <div className="projects-head" data-reveal="">
           <div className="heading" style={{ maxWidth: 640 }}>
-            <span className="eyebrow eyebrow--dark">PROJECTS</span>
-            <h2 className="h2" style={{ color: '#fff' }}>Commerce problems, engineered properly.</h2>
+            <span className="eyebrow">PROJECTS</span>
+            <h2 className="h2">Commerce problems, engineered properly.</h2>
           </div>
           <p className="projects-intro">
             Twelve client platforms across the Middle East, Australia, Russia and the USA — from omnichannel grocery

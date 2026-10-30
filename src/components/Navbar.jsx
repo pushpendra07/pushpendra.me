@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { nav } from '../data/profile';
 import { getLinks } from '../lib/links';
 import { scrollToHash } from '../lib/scroll';
+import ThemeToggle from './ThemeToggle';
 
 // Below this width the CSS swaps the link list for the menu button.
 const NARROW = 980;
@@ -43,36 +44,40 @@ export default function Navbar({ active, base = '' }) {
           <span className="sr-only"> — home</span>
         </a>
 
-        <div className="nav-right">
-          <ul className="nav-links">
-            {nav.map(([id, label]) => (
-              <li key={id}>
-                <a
-                  href={`${base}#${id}`}
-                  onClick={go}
-                  className={`nav-link${active === id ? ' is-active' : ''}`}
-                  aria-current={active === id ? 'true' : undefined}
-                >
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <a href={resume.href} download={resume.download} onClick={go} className="btn-resume">
-            {resume.label}
-          </a>
-        </div>
+        <div className="nav-end">
+          <div className="nav-right">
+            <ul className="nav-links">
+              {nav.map(([id, label]) => (
+                <li key={id}>
+                  <a
+                    href={`${base}#${id}`}
+                    onClick={go}
+                    className={`nav-link${active === id ? ' is-active' : ''}`}
+                    aria-current={active === id ? 'true' : undefined}
+                  >
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <a href={resume.href} download={resume.download} onClick={go} className="btn-resume">
+              {resume.label}
+            </a>
+          </div>
 
-        <button
-          type="button"
-          className="menu-toggle"
-          onClick={() => setMenuOpen((o) => !o)}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-menu"
-          aria-label="Toggle menu"
-        >
-          {menuOpen ? '✕' : '≡'}
-        </button>
+          <ThemeToggle />
+
+          <button
+            type="button"
+            className="menu-toggle"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? '✕' : '≡'}
+          </button>
+        </div>
       </nav>
 
       <div id="mobile-menu" className={`mobile-menu${menuOpen ? ' is-open' : ''}`}>

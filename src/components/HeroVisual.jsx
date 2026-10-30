@@ -147,7 +147,8 @@ export default function HeroVisual({ heroRef }) {
             <div className="tech-card" style={{ animationDuration: `${6 + (i % 4)}s`, animationDelay: `${-i * 0.9}s`, '--chip': item.color }}>
               {/* Re-keyed per snippet and on lighting up, so each change fades in. */}
               <span key={`${si}-${item.label}-${live[i]}`} className="tech-swap">
-                <TechIcon name={item.icon} color={item.color} />
+                {/* Coloured from --chip in CSS, darkened in the light theme for contrast. */}
+                <TechIcon name={item.icon} color="currentColor" />
                 {item.label}
               </span>
             </div>

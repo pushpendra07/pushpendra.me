@@ -10,10 +10,10 @@ function Packet({ path, dur, begin = '0s', className = 'flow-dot', r = 4 }) {
   );
 }
 
-function Arrow({ id, color }) {
+function Arrow({ id, className = 'dg-arrow' }) {
   return (
     <marker id={id} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0 0 L10 5 L0 10z" fill={color} />
+      <path d="M0 0 L10 5 L0 10z" className={className} />
     </marker>
   );
 }
@@ -59,9 +59,9 @@ export function ArchitectureDiagram({ data, id }) {
     + `${data.outbound ? ` through ${data.outbound}` : ''}.`;
 
   return (
-    <svg className="dg dg--dark dg--wide" viewBox="0 0 1000 400" role="img" aria-label={label}>
+    <svg className="dg dg--wide" viewBox="0 0 1000 400" role="img" aria-label={label}>
       <defs>
-        <Arrow id={`${id}-arrow`} color="rgba(167,139,250,.7)" />
+        <Arrow id={`${id}-arrow`} />
         <GlowFilter id={`${id}-glow`} />
         <linearGradient id={`${id}-core`} x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="#8b5cf6" />
@@ -183,10 +183,10 @@ export function BranchDiagram({ d, id }) {
   const yesPath = d.result ? yes : `M112 110 H155 L205 72 V44 H${boxX + boxW / 2}`;
   const noPath = d.result ? no : `M112 110 H155 L205 148 V176 H${boxX + boxW / 2}`;
   return (
-    <svg className="dg dg--dark" viewBox="0 0 520 220" role="img"
+    <svg className="dg" viewBox="0 0 520 220" role="img"
       aria-label={`${d.input}, then: ${d.question.join(' ')} Yes leads to ${d.yes}; no leads to ${d.no}${d.result ? `; both give ${d.result.join(' ')}` : ''}.`}>
       <defs>
-        <Arrow id={`${id}-arrow`} color="rgba(167,139,250,.7)" />
+        <Arrow id={`${id}-arrow`} />
         <GlowFilter id={`${id}-glow`} />
       </defs>
       <g className="dg-wire" markerEnd={`url(#${id}-arrow)`}>
@@ -254,10 +254,10 @@ export function PipelineDiagram({ d, id }) {
   const dur = `${1 + n * 0.9}s`;
 
   return (
-    <svg className="dg dg--dark" viewBox={`0 0 520 ${height}`} role="img"
+    <svg className="dg" viewBox={`0 0 520 ${height}`} role="img"
       aria-label={`${d.nodes.map((s) => s.replace('\n', ' ')).join(' → ')}${d.both ? ', in both directions' : ''}${d.loop ? `; ${d.loop.label}` : ''}.`}>
       <defs>
-        <Arrow id={`${id}-arrow`} color="rgba(103,232,249,.8)" />
+        <Arrow id={`${id}-arrow`} className="dg-arrow dg-arrow--cyan" />
         <GlowFilter id={`${id}-glow`} />
       </defs>
       <g className="dg-wire dg-wire--cyan" markerEnd={`url(#${id}-arrow)`} markerStart={d.both ? `url(#${id}-arrow)` : undefined}>
