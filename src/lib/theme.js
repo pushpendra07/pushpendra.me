@@ -1,5 +1,7 @@
 // Light/dark theme. The inline script in index.html sets data-theme on <html> before first
 // paint (saved choice, else the system setting); this module reads and changes it.
+import { prefersReducedMotion } from '../hooks/useReducedMotion';
+
 const KEY = 'theme';
 const LIGHT_QUERY = '(prefers-color-scheme: light)';
 // Browser UI colour per theme; matches --bg in styles.css.
@@ -25,9 +27,27 @@ const saved = () => {
   }
 };
 
+// Grows the new theme in a circle from `origin` ({ x, y } in viewport px). Falls back to an
+// instant swap without the View Transitions API or with reduced motion.
+function reveal(theme, origin) {
+  if (!origin || !document.startViewTransition || prefersReducedMotion()) {
+    apply(theme);
+    return;
+  }
+  const { x, y } = origin;
+  const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+  const transition = document.startViewTransition(() => apply(theme));
+  transition.ready.then(() => {
+    document.documentElement.animate(
+      { clipPath: [`circle(0 at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+      { duration: 550, easing: 'cubic-bezier(.2, .7, .2, 1)', pseudoElement: '::view-transition-new(root)' },
+    );
+  }).catch(() => {});
+}
+
 // Saves an explicit choice; from then on the system setting is ignored.
-export function setTheme(theme) {
-  apply(theme);
+export function setTheme(theme, origin) {
+  reveal(theme, origin);
   try {
     localStorage.setItem(KEY, theme);
   } catch {

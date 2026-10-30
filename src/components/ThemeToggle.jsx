@@ -15,7 +15,11 @@ export default function ThemeToggle() {
     <button
       type="button"
       className="theme-toggle"
-      onClick={() => setTheme(next)}
+      onClick={(e) => {
+        // The new theme grows from the button's centre.
+        const r = e.currentTarget.getBoundingClientRect();
+        setTheme(next, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+      }}
       aria-label={`Switch to ${next} theme`}
       title={`Switch to ${next} theme`}
     >

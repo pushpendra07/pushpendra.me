@@ -41,9 +41,11 @@
   /* Surfaces */
   --bg: #06070d;
   --bg-deep: #05060b;
-  --band: #0a0b14;
-  --band-alt: #06070d;
-  --band-tint: #0d0f1c;
+  --band: #0c0d1a;
+  --band-alt: #07080f;
+  --band-tint: #111326;
+  /* Hairline between plain bands; dark backgrounds are too close in tone to separate on their own. */
+  --band-edge: rgba(255, 255, 255, .06);
   --hero-bg: radial-gradient(120% 80% at 70% 10%, #11163a 0%, #080a18 45%, #05060b 100%);
   --feature-bg: radial-gradient(90% 60% at 50% 0%, #141a44 0%, #080a18 55%, #06070d 100%);
   --cs-hero-bg: radial-gradient(90% 70% at 70% 0%, #161c4a 0%, #080a18 55%, #06070d 100%);
@@ -112,6 +114,7 @@
   --orbit-b: rgba(103, 232, 249, .18);
   --chip-card: rgba(15, 17, 38, .78);
   --chip-shadow: rgba(0, 0, 0, .7);
+  --editor-shadow: 0 40px 80px -30px rgba(0, 0, 0, .8), 0 0 60px -10px rgba(124, 58, 237, .35);
   /* How much the hero chip icons are darkened for contrast. */
   --chip-shade: 0%;
 
@@ -150,7 +153,8 @@
   --band: #f6f5fb;
   --band-alt: #fff;
   --band-tint: #efedf8;
-  --hero-bg: radial-gradient(120% 80% at 70% 10%, #e9e3ff 0%, #f5f3fe 45%, #fbfaff 100%);
+  --band-edge: transparent;
+  --hero-bg: radial-gradient(120% 80% at 70% 10%, #e2d9ff 0%, #f3f0fe 45%, #fbfaff 100%);
   --feature-bg: radial-gradient(90% 60% at 50% 0%, #ebe6ff 0%, #f4f2fd 55%, #f6f5fb 100%);
   --cs-hero-bg: radial-gradient(90% 70% at 70% 0%, #e9e3ff 0%, #f5f3fe 55%, #fbfaff 100%);
   --card: #fff;
@@ -207,13 +211,14 @@
   --glow-violet: rgba(139, 92, 246, .16);
   --shadow-glow: rgba(109, 40, 217, .3);
   --spot: rgba(139, 92, 246, .1);
-  --blob-1: rgba(139, 92, 246, .2);
-  --blob-2: rgba(99, 102, 241, .14);
-  --blob-3: rgba(34, 211, 238, .16);
+  --blob-1: rgba(139, 92, 246, .3);
+  --blob-2: rgba(99, 102, 241, .22);
+  --blob-3: rgba(34, 211, 238, .22);
   --orbit-a: rgba(109, 40, 217, .25);
   --orbit-b: rgba(14, 116, 144, .25);
   --chip-card: rgba(255, 255, 255, .88);
-  --chip-shadow: rgba(40, 20, 90, .22);
+  --chip-shadow: rgba(40, 20, 90, .16);
+  --editor-shadow: 0 30px 60px -28px rgba(40, 20, 90, .45), 0 0 60px -12px rgba(124, 58, 237, .28);
   --chip-shade: 40%;
 
   --dg-box: #fff;
@@ -241,6 +246,9 @@
   --zone-zone-fg: #6d28d9;
   --zone-poly-fg: #0e7490;
 }
+
+/* Theme switch: a circle grows from the toggle (src/lib/theme.js); the default cross-fade is off. */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
 
 /* Switch themes in one frame instead of letting every transition fade. */
 .theme-switching, .theme-switching *, .theme-switching *::before, .theme-switching *::after { transition: none !important; }
@@ -469,7 +477,7 @@ main section[id] { scroll-margin-top: 64px; }
 .editor {
   border-radius: 16px; background: linear-gradient(180deg, rgba(20, 22, 48, .92), rgba(10, 11, 26, .95));
   border: 1px solid rgba(167, 139, 250, .25);
-  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .8), 0 0 60px -10px rgba(124, 58, 237, .35); overflow: hidden;
+  box-shadow: var(--editor-shadow); overflow: hidden;
 }
 .editor-bar {
   display: flex; align-items: flex-end; gap: 12px; padding: 10px 14px 0;
@@ -558,7 +566,7 @@ main section[id] { scroll-margin-top: 64px; }
 }
 
 /* ---------- About ---------- */
-.about { background: var(--band); color: var(--text); padding: 120px 24px; }
+.about { background: var(--band); color: var(--text); padding: 120px 24px; border-top: 1px solid var(--band-edge); }
 .about-grid {
   max-width: 1180px; margin: 0 auto; display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: 72px; align-items: start;
@@ -675,7 +683,7 @@ main section[id] { scroll-margin-top: 64px; }
 .project-soon { color: var(--fg-4); font-family: var(--font-mono); font-size: 12px; }
 
 /* ---------- Skills ---------- */
-.skills { background: var(--band); color: var(--text); padding: 120px 24px; }
+.skills { background: var(--band); color: var(--text); padding: 120px 24px; border-top: 1px solid var(--band-edge); }
 .section-stack { display: flex; flex-direction: column; gap: 52px; }
 .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 16px; }
 .skill-card {
@@ -697,7 +705,7 @@ main section[id] { scroll-margin-top: 64px; }
 .skill-note { margin: -8px 0 0; font-size: 13.5px; line-height: 1.5; color: var(--fg-4); }
 
 /* ---------- Certifications ---------- */
-.certs { background: var(--band-tint); color: var(--text); padding: 110px 24px; }
+.certs { background: var(--band-tint); color: var(--text); padding: 110px 24px; border-top: 1px solid var(--band-edge); }
 .certs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 48px; align-items: start; }
 .certs .h2 { font-size: clamp(34px, 4.2vw, 48px); }
 .certs-side { display: flex; flex-direction: column; gap: 18px; }
@@ -854,8 +862,8 @@ main section[id] { scroll-margin-top: 64px; }
 
 /* ---------- In-depth case study ---------- */
 .cs-section { padding: 100px 24px; color: var(--text); }
-.cs-section--light { background: var(--band); }
-.cs-section--tint { background: var(--band-tint); }
+.cs-section--light { background: var(--band); border-top: 1px solid var(--band-edge); }
+.cs-section--tint { background: var(--band-tint); border-top: 1px solid var(--band-edge); }
 .cs-section--feature { background: var(--feature-bg); }
 .cs-stack-sm { display: flex; flex-direction: column; gap: 40px; }
 .cs-intro { margin: 0; max-width: 720px; font-size: 17px; line-height: 1.65; color: var(--muted); text-wrap: pretty; }
@@ -1145,7 +1153,7 @@ main section[id] { scroll-margin-top: 64px; }
 .cert-verify:hover { color: var(--fg-strong); }
 
 /* ---------- Testimonials ---------- */
-.testimonials { background: var(--band); color: var(--text); padding: 110px 24px; }
+.testimonials { background: var(--band); color: var(--text); padding: 110px 24px; border-top: 1px solid var(--band-edge); }
 .quote-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; }
 .quote { margin: 0; padding: 28px; border-radius: 22px; background: var(--card); border: 1px solid var(--rule); display: flex; flex-direction: column; gap: 18px; }
 .quote blockquote { margin: 0; }

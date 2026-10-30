@@ -12,7 +12,7 @@ const AMBIENT_EVERY = 3600; // ms between ripples that start on their own
 // Dots run from `from` on the left to `to` on the right; deeper tones on the light theme.
 const PALETTES = {
   dark: { from: [167, 139, 250], to: [103, 232, 249], idle: 'rgba(196, 181, 253, .13)', glow: '139, 92, 246' },
-  light: { from: [124, 58, 237], to: [8, 145, 178], idle: 'rgba(109, 40, 217, .14)', glow: '139, 92, 246' },
+  light: { from: [124, 58, 237], to: [8, 145, 178], idle: 'rgba(109, 40, 217, .2)', glow: '139, 92, 246' },
 };
 
 // Interactive dot grid behind the hero: dots near the pointer light up, lean in and
