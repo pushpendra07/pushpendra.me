@@ -3,6 +3,7 @@ import Root from './components/Root';
 import { nav } from './data/profile';
 import useActiveSection from './hooks/useActiveSection';
 import About from './sections/About';
+import AiBuilds from './sections/AiBuilds';
 import Certifications from './sections/Certifications';
 import Contact from './sections/Contact';
 import Experience from './sections/Experience';
@@ -26,6 +27,7 @@ export default function HomePage() {
         <About />
         <Experience />
         <Projects />
+        <AiBuilds />
         <Skills />
         <Certifications />
         <Testimonials />

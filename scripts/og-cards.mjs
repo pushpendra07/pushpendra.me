@@ -7,7 +7,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { projects } from '../src/data/profile.js';
+import { products, projects } from '../src/data/profile.js';
 import { clientName, publicSlug } from '../src/lib/projects.js';
 
 const CHROME = process.env.CHROME ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
@@ -65,6 +65,13 @@ const cards = [
     eyebrow: `Case study · ${pj.category}`,
     title: clientName(pj),
     meta: [pj.platform, pj.place].filter(Boolean).join(' · '),
+    tags: pj.tags,
+  })),
+  ...products.map((pj) => ({
+    slug: pj.slug,
+    eyebrow: 'Built with AI · Product case study',
+    title: pj.title,
+    meta: pj.platform,
     tags: pj.tags,
   })),
 ];

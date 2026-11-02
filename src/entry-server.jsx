@@ -1,6 +1,6 @@
 import { renderToString } from 'react-dom/server';
 import App from './App';
-import { certs, config, education, experience, projects, skills } from './data/profile';
+import { certs, config, education, experience, products, projects, skills } from './data/profile';
 import { caseStudyPath, clientName, publicSlug } from './lib/projects';
 
 const SITE = 'https://pushpendra.me';
@@ -36,7 +36,25 @@ const person = {
 export const homeJsonLd = { '@context': 'https://schema.org', ...person };
 
 // Case-study pages to pre-render alongside the home page, with their <head> details.
-export const caseStudies = projects.map((pj) => ({
+const productPages = products.map((pj) => ({
+  path: caseStudyPath(pj),
+  title: `${pj.title}: product case study — Pushpendra Singh`,
+  description: pj.desc,
+  image: `${SITE}/og/${pj.slug}.jpg`,
+  jsonLd: {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: pj.title,
+    applicationCategory: pj.category,
+    description: pj.desc,
+    url: `${SITE}${caseStudyPath(pj)}`,
+    image: `${SITE}/og/${pj.slug}.jpg`,
+    keywords: pj.tags.join(', '),
+    author: { '@id': `${SITE}/#person`, '@type': 'Person', name: person.name, url: person.url },
+  },
+}));
+
+export const caseStudies = [...projects.map((pj) => ({
   path: caseStudyPath(pj),
   title: `${clientName(pj)} case study — Pushpendra Singh`,
   description: pj.desc,
@@ -51,4 +69,4 @@ export const caseStudies = projects.map((pj) => ({
     keywords: pj.tags.join(', '),
     author: { '@id': `${SITE}/#person`, '@type': 'Person', name: person.name, url: person.url },
   },
-}));
+})), ...productPages];

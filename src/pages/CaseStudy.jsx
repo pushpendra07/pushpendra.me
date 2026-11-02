@@ -5,9 +5,8 @@ import {
 import { caseStudies } from '../data/caseStudies';
 import useActiveSection from '../hooks/useActiveSection';
 import { prefersReducedMotion } from '../hooks/useReducedMotion';
-import { projects } from '../data/profile';
 import { externalProps, getLinks } from '../lib/links';
-import { caseStudyPath, clientName } from '../lib/projects';
+import { caseStudyPath, clientName, siblingsOf } from '../lib/projects';
 
 
 const ICONS = {
@@ -143,7 +142,7 @@ function DeepSections({ study, details }) {
       {study.gallery?.length > 0 && (
         <section id="cs-gallery" className="cs-section cs-section--tint">
           <div className="cs-container cs-stack-sm">
-            <SectionHead n="IN PRODUCTION" title="What customers see." />
+            <SectionHead n={study.galleryLabel ?? 'IN PRODUCTION'} title={study.galleryTitle ?? 'What customers see.'} />
             <div className="cs-gallery">
               {study.gallery.map((g, i) => (
                 <figure key={g.src} className="cs-shot" data-reveal="" data-delay={(i % 2) * 100}>
@@ -330,9 +329,12 @@ function BuildList({ details }) {
 export default function CaseStudy({ project: pj }) {
   const { emailHref, emailLabel, linkedin } = getLinks();
   const study = caseStudies[pj.slug];
-  const i = projects.indexOf(pj);
-  const prev = projects[(i - 1 + projects.length) % projects.length];
-  const next = projects[(i + 1) % projects.length];
+  const product = pj.kind === 'product';
+  const list = siblingsOf(pj);
+  const back = product ? '/#ai-builds' : '/#projects';
+  const i = list.indexOf(pj);
+  const prev = list[(i - 1 + list.length) % list.length];
+  const next = list[(i + 1) % list.length];
   const facts = study?.facts ?? [
     ...(pj.place ? [['Location', pj.place]] : []),
     ['Platform', pj.platform],
@@ -340,16 +342,18 @@ export default function CaseStudy({ project: pj }) {
   ];
 
   // Pre-rendered pages already carry this title; this covers the dev server.
-  useEffect(() => { document.title = `${clientName(pj)} case study — Pushpendra Singh`; }, [pj]);
+  useEffect(() => {
+    document.title = product ? `${pj.title}: product case study — Pushpendra Singh` : `${clientName(pj)} case study — Pushpendra Singh`;
+  }, [pj, product]);
 
   return (
     <main className="cs">
       <header className="cs-hero">
         <div className="cs-hero-glow" aria-hidden="true" />
         <div className="cs-container cs-hero-inner">
-          <a href="/#projects" className="cs-back">← All projects</a>
+          <a href={back} className="cs-back">← {product ? 'All AI builds' : 'All projects'}</a>
           <span className="eyebrow">
-            {study ? 'ARCHITECTURE CASE STUDY' : 'CASE STUDY'}
+            {product ? 'PRODUCT CASE STUDY · BUILT WITH AI' : study ? 'ARCHITECTURE CASE STUDY' : 'CASE STUDY'}
           </span>
           <h1 className="cs-title">{clientName(pj)}</h1>
           <p className="cs-lead">{study?.lead ?? pj.desc}</p>
@@ -359,6 +363,14 @@ export default function CaseStudy({ project: pj }) {
           <div className="tags">
             {(study?.tags ?? pj.tags).map((tg) => <span key={tg} className="tag-dark">{tg}</span>)}
           </div>
+          {product && (
+            <div className="cs-links">
+              {pj.demoUrl && <a href={pj.demoUrl} className="btn-white" {...externalProps(true)}>Live demo ↗</a>}
+              {pj.repoUrl
+                ? <a href={pj.repoUrl} className="btn-outline" {...externalProps(true)}>View on GitHub ↗</a>
+                : <span className="cs-private">Source code is private · walkthrough on request</span>}
+            </div>
+          )}
         </div>
       </header>
 
@@ -399,7 +411,7 @@ export default function CaseStudy({ project: pj }) {
       )}
 
       <section className="cs-pager-band">
-        <nav className="cs-container cs-pager" aria-label="More case studies">
+        <nav className="cs-container cs-pager" aria-label={product ? 'More AI builds' : 'More case studies'}>
           <a href={caseStudyPath(prev)} className="cs-pager-link">
             <span className="cs-pager-dir">← Previous</span>
             <span className="cs-pager-title">{clientName(prev)}</span>
@@ -416,12 +428,21 @@ export default function CaseStudy({ project: pj }) {
       <section className="cs-cta">
         <div className="contact-glow" aria-hidden="true" />
         <div className="cs-container cs-cta-inner">
-          <h2 className="cs-cta-title">Facing a similar <span className="gradient-text">commerce problem?</span></h2>
-          <p className="contact-lead">I&apos;m available immediately for senior Adobe Commerce roles and contract work. Tell me what you&apos;re building.</p>
+          {product ? (
+            <>
+              <h2 className="cs-cta-title">Want a <span className="gradient-text">walkthrough?</span></h2>
+              <p className="contact-lead">The code is private, but I&apos;m happy to demo the product and talk through the architecture. I&apos;m available immediately for senior roles and contract work.</p>
+            </>
+          ) : (
+            <>
+              <h2 className="cs-cta-title">Facing a similar <span className="gradient-text">commerce problem?</span></h2>
+              <p className="contact-lead">I&apos;m available immediately for senior Adobe Commerce roles and contract work. Tell me what you&apos;re building.</p>
+            </>
+          )}
           <div className="contact-actions">
             <a href={emailHref} className="btn-white">{emailLabel}</a>
             <a href={linkedin.href} className="btn-outline" {...externalProps(linkedin.external)}>LinkedIn</a>
-            <a href="/#projects" className="btn-outline">All projects</a>
+            <a href={back} className="btn-outline">{product ? 'All AI builds' : 'All projects'}</a>
           </div>
         </div>
       </section>
