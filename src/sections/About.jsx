@@ -14,8 +14,8 @@ export default function About() {
             <h2 className="h2">A commerce engineer who cares about what happens after launch.</h2>
           </div>
           <p className="about-p" data-reveal="">
-            I&apos;m a Senior Software Developer with tech-lead responsibilities at Krish TechnoLabs, and an
-            Adobe Certified Expert in Adobe Commerce development, available to join immediately. Over 12+ years I&apos;ve designed and optimised
+            I&apos;m Pushpendra Singh Sodha, a Senior Software Developer with tech-lead responsibilities at Krish
+            TechnoLabs, and an Adobe Certified Expert in Adobe Commerce and Magento 2 development, available to join immediately. Over 12+ years I&apos;ve designed and optimised
             enterprise stores on Adobe Commerce Cloud, on-premise and Open Source — integrating SAP, Microsoft
             Dynamics AX, RabbitMQ, Talon.One, loyalty platforms, payment gateways, delivery partners and mobile
             apps, and leading large Magento 1 to Magento 2 migrations.

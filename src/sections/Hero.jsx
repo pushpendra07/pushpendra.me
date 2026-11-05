@@ -31,7 +31,7 @@ export default function Hero() {
           </div>
           {/* One h1 so the name and role are part of the page's main heading. */}
           <h1 className="heading hero-heading">
-            <span className="hero-hi">Hi, I&apos;m Pushpendra Singh.</span>
+            <span className="hero-hi">Hi, I&apos;m Pushpendra Singh Sodha.</span>
             <span className="hero-title">
               I build <span className="gradient-text">scalable commerce</span> experiences.
             </span>

@@ -13,8 +13,11 @@ export function render(path) {
 const person = {
   '@type': 'Person',
   '@id': `${SITE}/#person`,
-  name: 'Pushpendra Singh',
-  alternateName: ['Pushpendra', 'Pushpendra Singh Sodha'],
+  name: 'Pushpendra Singh Sodha',
+  alternateName: ['Pushpendra Singh', 'Pushpendra'],
+  givenName: 'Pushpendra',
+  additionalName: 'Singh',
+  familyName: 'Sodha',
   jobTitle: 'Magento 2 & PHP Developer, Adobe Commerce Solution Architect',
   url: `${SITE}/`,
   image: `${SITE}/images/portrait-760.jpg`,
@@ -30,10 +33,18 @@ const person = {
     recognizedBy: { '@type': 'Organization', name: 'Adobe' },
     ...(c.verifyUrl && { url: c.verifyUrl }),
   })),
-  knowsAbout: skills.filter((sk) => !sk.learning).flatMap((sk) => sk.items).slice(0, 30),
+  knowsAbout: [...new Set(['Magento', 'Adobe Commerce', 'PHP', ...skills.filter((sk) => !sk.learning).flatMap((sk) => sk.items)])].slice(0, 30),
 };
 
-export const homeJsonLd = { '@context': 'https://schema.org', ...person };
+// ProfilePage marks the home page as this person's own profile (Google's profile-page rich result).
+export const homeJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  '@id': `${SITE}/#profile`,
+  url: `${SITE}/`,
+  name: 'Pushpendra Singh Sodha — Magento 2 & Adobe Commerce Developer, PHP',
+  mainEntity: person,
+};
 
 // Case-study pages to pre-render alongside the home page, with their <head> details.
 const productPages = products.map((pj) => ({
