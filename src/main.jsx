@@ -1,4 +1,4 @@
-import { StrictMode } from 'react';
+import { startTransition, StrictMode } from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import { findProject } from './lib/projects';
 import './styles.css';
@@ -13,6 +13,7 @@ page.then((element) => {
   const root = document.getElementById('root');
   const app = <StrictMode>{element}</StrictMode>;
   // Production HTML is pre-rendered (scripts/prerender.js); dev starts empty.
-  if (root.hasChildNodes()) hydrateRoot(root, app);
+  // Inside a transition, hydration yields to the browser between chunks instead of one long task.
+  if (root.hasChildNodes()) startTransition(() => { hydrateRoot(root, app); });
   else createRoot(root).render(app);
 });

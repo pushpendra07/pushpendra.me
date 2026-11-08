@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PBV4P35V2D"></script>
+    <!-- Google tag, loaded once the page is idle so it never competes with first paint. -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -13,11 +12,19 @@
       gtag('consent', 'default', { analytics_storage: 'granted', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
       gtag('consent', 'default', { analytics_storage: 'denied', region: ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH'] });
       gtag('js', new Date());
-
       gtag('config', 'G-PBV4P35V2D');
+      (function(){var done=false;function load(){if(done)return;done=true;var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=G-PBV4P35V2D';document.head.appendChild(s);}
+      function idle(){(window.requestIdleCallback||function(f){setTimeout(f,1)})(load,{timeout:4000});}
+      if(document.readyState==='complete')setTimeout(idle,2500);else addEventListener('load',function(){setTimeout(idle,2500);});
+      ['pointerdown','keydown','scroll'].forEach(function(e){addEventListener(e,load,{once:true,passive:true});});})();
     </script>
     <title>Pushpendra Singh Sodha — Magento 2 &amp; Adobe Commerce Developer, PHP</title>
     <meta name="description" content="Pushpendra Singh Sodha — Adobe Certified Expert and senior Magento 2 / Adobe Commerce and PHP developer with 12+ years building enterprise e-commerce platforms, ERP integrations and headless commerce." />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="author" content="Pushpendra Singh Sodha" />
+    <link rel="author" href="/humans.txt" />
+    <link rel="alternate" type="text/plain" title="Site summary for AI assistants" href="/llms.txt" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     <link rel="canonical" href="https://pushpendra.me/" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://pushpendra.me/" />
@@ -28,13 +35,16 @@
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Pushpendra Singh — Adobe Certified Expert, Adobe Commerce Solution Architect" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#06070d" />
+    <meta name="theme-color" content="#ffffff" />
     <meta name="color-scheme" content="dark light" />
-    <!-- Theme before first paint: saved choice, else the system setting (src/lib/theme.js). -->
-    <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.dataset.theme=t;document.querySelector('meta[name=theme-color]').content=t==='light'?'#fbfaff':'#06070d'})()</script>
+    <!-- Theme before first paint: light unless the visitor picked dark (src/lib/theme.js). -->
+    <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}t=t==='dark'?'dark':'light';document.documentElement.dataset.theme=t;document.querySelector('meta[name=theme-color]').content=t==='light'?'#ffffff':'#0a0b14'})()</script>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preload" href="/fonts/space-grotesk.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/dm-sans.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preload" href="/fonts/inter-tight.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body>
     <div id="root"></div>

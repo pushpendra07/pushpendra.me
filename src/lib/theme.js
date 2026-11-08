@@ -1,14 +1,13 @@
-// Light/dark theme. The inline script in index.html sets data-theme on <html> before first
-// paint (saved choice, else the system setting); this module reads and changes it.
+// Light/dark theme. Light is the default; the inline script in index.html applies a saved
+// "dark" choice before first paint. The device's own setting is not followed.
 import { prefersReducedMotion } from '../hooks/useReducedMotion';
 
 const KEY = 'theme';
-const LIGHT_QUERY = '(prefers-color-scheme: light)';
 // Browser UI colour per theme; matches --bg in styles.css.
-const THEME_COLOR = { dark: '#06070d', light: '#fbfaff' };
+const THEME_COLOR = { dark: '#0a0b14', light: '#ffffff' };
 
 export const getTheme = () =>
-  typeof document !== 'undefined' && document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+  typeof document !== 'undefined' && document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
 
 function apply(theme) {
   const root = document.documentElement;
@@ -40,12 +39,28 @@ function reveal(theme, origin) {
   transition.ready.then(() => {
     document.documentElement.animate(
       { clipPath: [`circle(0 at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
-      { duration: 550, easing: 'cubic-bezier(.2, .7, .2, 1)', pseudoElement: '::view-transition-new(root)' },
+      { duration: 500, easing: 'cubic-bezier(.22, 1, .36, 1)', pseudoElement: '::view-transition-new(root)' },
     );
   }).catch(() => {});
 }
 
-// Saves an explicit choice; from then on the system setting is ignored.
+const CHOICE_EVENT = 'themechoice';
+
+// The visitor's choice: 'dark' only if they picked it, otherwise 'light'.
+export const getChoice = () => (typeof window !== 'undefined' && saved() === 'dark' ? 'dark' : 'light');
+
+export function subscribeChoice(onChange) {
+  window.addEventListener(CHOICE_EVENT, onChange);
+  window.addEventListener('storage', onChange);
+  return () => { window.removeEventListener(CHOICE_EVENT, onChange); window.removeEventListener('storage', onChange); };
+}
+
+export function setChoice(choice, origin) {
+  setTheme(choice, origin);
+  window.dispatchEvent(new Event(CHOICE_EVENT));
+}
+
+// Applies and remembers a theme.
 export function setTheme(theme, origin) {
   reveal(theme, origin);
   try {
@@ -60,12 +75,4 @@ export function subscribe(onChange) {
   const observer = new MutationObserver(onChange);
   observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   return () => observer.disconnect();
-}
-
-// Follows system light/dark changes until the visitor picks a theme.
-export function followSystem() {
-  const mq = window.matchMedia(LIGHT_QUERY);
-  const onChange = () => { if (!saved()) apply(mq.matches ? 'light' : 'dark'); };
-  mq.addEventListener('change', onChange);
-  return () => mq.removeEventListener('change', onChange);
 }

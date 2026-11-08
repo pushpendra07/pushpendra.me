@@ -6,6 +6,12 @@ import { caseStudies } from '../data/caseStudies';
 import useActiveSection from '../hooks/useActiveSection';
 import { prefersReducedMotion } from '../hooks/useReducedMotion';
 import { externalProps, getLinks } from '../lib/links';
+import { openEmail } from '../lib/email';
+import BrandIcon from '../components/BrandIcon';
+import Place from '../components/Place';
+import IntegrationMap from '../components/IntegrationMap';
+import ProjectScene, { hasScene } from '../components/ProjectScene';
+import { brands } from '../data/brands';
 import { caseStudyPath, clientName, siblingsOf } from '../lib/projects';
 
 
@@ -30,17 +36,30 @@ const ICONS = {
 
 function Icon({ name }) {
   return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
       strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {ICONS[name]}
     </svg>
   );
 }
 
+// Brand mark for a technology name when one exists (SAP, GraphQL, RabbitMQ, Redis, MySQL and so on).
+const BRAND_MATCH = Object.entries(brands).map(([key, b]) => [key, b.title.toLowerCase()]);
+function brandFor(name) {
+  const n = name.toLowerCase();
+  const hit = BRAND_MATCH.find(([key, title]) => n.includes(title) || n.startsWith(key));
+  return hit ? hit[0] : null;
+}
+function Tech({ name }) {
+  const b = brandFor(name);
+  return <span className="tech-chip">{b && <BrandIcon name={b} size={14} />}{name}</span>;
+}
+
+// Section labels are numbered by a CSS counter, so the numbers follow whichever sections a study has.
 function SectionHead({ n, title, intro }) {
   return (
     <div className="heading cs-head" data-reveal="">
-      <span className="eyebrow">{n}</span>
+      <span className="tag cs-tag">{n}</span>
       <h2 className="h2">{title}</h2>
       {intro && <p className="cs-intro">{intro}</p>}
     </div>
@@ -66,8 +85,26 @@ function SectionMenu({ items }) {
     if (link) list.scrollTo({ left: link.offsetLeft - 16, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
   }, [active]);
 
+  const barRef = useRef(null);
+  // Reading progress: a thin bar under the menu, updated at most once a frame.
+  useEffect(() => {
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        if (barRef.current) barRef.current.style.transform = `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`;
+      });
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(raf); };
+  }, []);
+
   return (
-    <nav className="cs-toc" aria-label="Case study sections">
+    <nav className="cs-toc" id="case-study" aria-label="Case study sections">
+      <span ref={barRef} className="cs-progress" aria-hidden="true" />
       <ol ref={listRef} className="cs-container cs-toc-list">
         {items.map(([key, label]) => {
           const on = active === `cs-${key}`;
@@ -85,10 +122,22 @@ function SectionMenu({ items }) {
 }
 
 // Renders whichever sections a study has.
-function DeepSections({ study, details }) {
+// Up to ten systems for the integration map: everything in the stack table except the platform
+// itself, branded tools first so the picture is easy to read.
+function mapNodes(study, platform) {
+  const seen = new Set();
+  const all = (study.stack || []).flatMap(([group, items], g) => items.map((name, k) => ({ name, group, first: g === 0 && k === 0 })));
+  const nodes = all.filter((x) => !x.first && !seen.has(x.name.toLowerCase()) && seen.add(x.name.toLowerCase()) && x.name !== platform);
+  return [...nodes.filter((x) => brandFor(x.name)), ...nodes.filter((x) => !brandFor(x.name))].slice(0, 10);
+}
+
+function DeepSections({ study, details, pj }) {
+  const nodes = mapNodes(study, pj.platform);
+  const product = pj.kind === 'product';
   const arch = study.architecture;
   const diagrams = study.diagrams ?? [];
   const menu = useMemo(() => [
+    nodes.length >= 3 && ['map', 'Integrations'],
     study.highlights && ['highlights', 'Highlights'],
     study.architecture && ['architecture', 'Architecture'],
     study.gallery?.length && ['gallery', 'Screens'],
@@ -99,19 +148,32 @@ function DeepSections({ study, details }) {
     study.decisions && ['decisions', 'Decisions'],
     study.stack && ['stack', 'Stack'],
     ['log', 'Build log'],
-  ].filter(Boolean), [study]);
+  ].filter(Boolean), [study, nodes.length]);
 
   return (
     <>
       <SectionMenu items={menu} />
+      {nodes.length >= 3 && (
+        <section id="cs-map" className="cs-section cs-section--tint">
+          <div className="cs-container cs-stack-sm">
+            <SectionHead n={product ? 'How it fits together' : 'Integration map'}
+              title={product ? 'One product, every moving part' : 'Everything this platform talks to'}
+              intro={product ? 'The main technologies behind the product, around the app itself.' : 'The commerce platform in the middle, and the systems I connected it to around it.'} />
+            <div data-reveal="">
+              <IntegrationMap center={product ? pj.title : pj.platform} sub={product ? pj.category : clientName(pj)} nodes={nodes} brandFor={brandFor} />
+            </div>
+          </div>
+        </section>
+      )}
+
       {study.highlights && (
         <section id="cs-highlights" className="cs-section cs-section--light">
           <div className="cs-container cs-stack-sm">
-            <SectionHead n="HIGHLIGHTS"
-              title={study.highlightsTitle ?? `${COUNT_WORDS[study.highlights.length]} things that set this build apart.`} />
+            <SectionHead n="Highlights"
+              title={study.highlightsTitle ?? `${COUNT_WORDS[study.highlights.length]} things that set this build apart`} />
             <ul className="cs-highlights">
               {study.highlights.map((h, i) => (
-                <li key={h.title} className={`cs-hl cs-hl--${i}`} data-reveal="" data-delay={i * 80}>
+                <li key={h.title} className={`cs-hl cs-hl--${i % 5}`} data-reveal="" data-delay={i * 80}>
                   <span className="cs-hl-icon"><Icon name={h.icon} /></span>
                   <h3 className="cs-hl-title">{h.title}</h3>
                   <p className="cs-hl-text">{h.text}</p>
@@ -125,7 +187,7 @@ function DeepSections({ study, details }) {
       {arch && (
         <section id="cs-architecture" className="cs-section cs-section--feature">
           <div className="cs-container cs-stack-sm">
-            <SectionHead n='ARCHITECTURE OVERVIEW' title={arch.title} intro={arch.intro} />
+            <SectionHead n='Architecture overview' title={arch.title} intro={arch.intro} />
             <div className="cs-diagram-frame" data-reveal="">
               <div className="cs-diagram-scroll"><ArchitectureDiagram data={arch} id="arch" /></div>
             </div>
@@ -142,7 +204,7 @@ function DeepSections({ study, details }) {
       {study.gallery?.length > 0 && (
         <section id="cs-gallery" className="cs-section cs-section--tint">
           <div className="cs-container cs-stack-sm">
-            <SectionHead n={study.galleryLabel ?? 'IN PRODUCTION'} title={study.galleryTitle ?? 'What customers see.'} />
+            <SectionHead n={study.galleryLabel ?? 'In production'} title={study.galleryTitle ?? 'What customers see'} />
             <div className="cs-gallery">
               {study.gallery.map((g, i) => (
                 <figure key={g.src} className="cs-shot" data-reveal="" data-delay={(i % 2) * 100}>
@@ -158,7 +220,7 @@ function DeepSections({ study, details }) {
       {study.capabilities && (
         <section id="cs-capabilities" className="cs-section cs-section--light">
           <div className="cs-container cs-stack-sm">
-            <SectionHead n='WHAT THE PLATFORM DOES' title={study.capabilitiesTitle ?? 'What the platform does.'} />
+            <SectionHead n='What the platform does' title={study.capabilitiesTitle ?? 'What the platform does'} />
             <ul className="cs-caps">
               {study.capabilities.map(([title, text], i) => (
                 <li key={title} className={`cs-cap cs-cap--${i % 10}`} data-reveal="" data-delay={(i % 2) * 80}>
@@ -178,7 +240,7 @@ function DeepSections({ study, details }) {
             <ol className="cs-flow" data-reveal="" style={{ '--n': study.flow.steps.length }}>
               {study.flow.steps.map(([title, text], i) => (
                 <li key={title} className="cs-step" style={{ '--i': i }}>
-                  <span className="cs-step-n">STEP {i + 1}</span>
+                  <span className="cs-step-n">Step {i + 1}</span>
                   <h3 className="cs-step-title">{title}</h3>
                   <p className="cs-step-text">{text}</p>
                 </li>
@@ -191,7 +253,7 @@ function DeepSections({ study, details }) {
       {study.zones && (
         <section id="cs-zones" className="cs-section cs-section--light">
           <div className="cs-container cs-stack-sm">
-            <SectionHead n='HOW DELIVERY ZONES WORK' title="Polygon › Zone › Source." intro={study.zones.intro} />
+            <SectionHead n='How delivery zones work' title="Polygon, zone, source" intro={study.zones.intro} />
             <div className="cs-zones">
               <div className="cs-zone-art" data-reveal=""><ZoneDiagram /></div>
               <ul className="cs-zone-list">
@@ -210,8 +272,8 @@ function DeepSections({ study, details }) {
       {(study.challenges || diagrams.length > 0) && (
         <section id="cs-challenges" className="cs-section cs-section--feature">
           <div className="cs-container cs-stack-sm">
-            <SectionHead n='KEY TECHNICAL CHALLENGES'
-              title={study.challenges?.title ?? 'How it works.'} intro={study.challenges?.intro} />
+            <SectionHead n='Key technical challenges'
+              title={study.challenges?.title ?? 'How it works'} intro={study.challenges?.intro} />
             {study.challenges && (
               <ol className="cs-challenges">
                 {study.challenges.items.map(([title, problem, solution, result], i) => (
@@ -251,7 +313,7 @@ function DeepSections({ study, details }) {
       {study.decisions && (
         <section id="cs-decisions" className="cs-section cs-section--light">
           <div className="cs-container cs-stack-sm">
-            <SectionHead n='DESIGN DECISIONS' title="The options weighed, and the trade-offs accepted."
+            <SectionHead n='Design decisions' title="The options weighed, and the trade-offs accepted"
               intro="How the hardest calls were made: what else was on the table, why it lost, and what the chosen design costs." />
             <div className="cs-decisions">
               {study.decisions.map((dec) => (
@@ -284,12 +346,12 @@ function DeepSections({ study, details }) {
       {study.stack && (
         <section id="cs-stack" className="cs-section cs-section--light cs-section--rule">
           <div className="cs-container cs-stack-sm">
-            <SectionHead n='TECHNOLOGIES & INTEGRATIONS' title="The stack behind it." />
+            <SectionHead n='Technologies and integrations' title="The stack behind it" />
             <dl className="cs-stack-table" data-reveal="">
               {study.stack.map(([group, items]) => (
                 <div key={group} className="cs-stack-row">
                   <dt>{group}</dt>
-                  <dd>{items.map((it) => <span key={it} className="tag-light">{it}</span>)}</dd>
+                  <dd>{items.map((it) => <Tech key={it} name={it} />)}</dd>
                 </div>
               ))}
               {study.skills && (
@@ -305,7 +367,7 @@ function DeepSections({ study, details }) {
 
       <section id="cs-log" className="cs-section cs-section--tint">
         <div className="cs-container cs-stack-sm">
-          <SectionHead n='FULL BUILD LOG' title="The work, piece by piece." />
+          <SectionHead n='Full build log' title="The work, piece by piece" />
           <BuildList details={details} />
         </div>
       </section>
@@ -318,7 +380,7 @@ function BuildList({ details }) {
     <ol className="cs-list">
       {details.map((d, k) => (
         <li key={d} className="cs-item" data-reveal="" data-delay={(k % 2) * 90}>
-          <span className="cs-item-n" aria-hidden="true">✓</span>
+          <span className="cs-item-n" aria-hidden="true">{String(k + 1).padStart(2, '0')}</span>
           <p>{d}</p>
         </li>
       ))}
@@ -327,7 +389,7 @@ function BuildList({ details }) {
 }
 
 export default function CaseStudy({ project: pj }) {
-  const { emailHref, emailLabel, linkedin } = getLinks();
+  const { linkedin } = getLinks();
   const study = caseStudies[pj.slug];
   const product = pj.kind === 'product';
   const list = siblingsOf(pj);
@@ -335,6 +397,10 @@ export default function CaseStudy({ project: pj }) {
   const i = list.indexOf(pj);
   const prev = list[(i - 1 + list.length) % list.length];
   const next = list[(i + 1) % list.length];
+  // Up to three related studies: those sharing a focus area first, then the rest in order.
+  const shared = (r) => (pj.focus || []).filter((f) => (r.focus || []).includes(f)).length;
+  const related = list.filter((r) => r !== pj).map((r, k) => ({ r, k, s: shared(r) }))
+    .sort((x, y) => y.s - x.s || x.k - y.k).slice(0, 3).map(({ r }) => r);
   const facts = study?.facts ?? [
     ...(pj.place ? [['Location', pj.place]] : []),
     ['Platform', pj.platform],
@@ -347,50 +413,63 @@ export default function CaseStudy({ project: pj }) {
   }, [pj, product]);
 
   return (
-    <main className="cs">
+    <main id="main" className="cs">
       <header className="cs-hero">
-        <div className="cs-hero-glow" aria-hidden="true" />
-        <div className="cs-container cs-hero-inner">
-          <a href={back} className="cs-back">← {product ? 'All AI builds' : 'All projects'}</a>
-          <span className="eyebrow">
-            {product ? 'PRODUCT CASE STUDY · BUILT WITH AI' : study ? 'ARCHITECTURE CASE STUDY' : 'CASE STUDY'}
-          </span>
-          <h1 className="cs-title">{clientName(pj)}</h1>
-          <p className="cs-lead">{study?.lead ?? pj.desc}</p>
-          <dl className="cs-meta">
-            {facts.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
-          </dl>
-          <div className="tags">
-            {(study?.tags ?? pj.tags).map((tg) => <span key={tg} className="tag-dark">{tg}</span>)}
-          </div>
-          {product && (
-            <div className="cs-links">
-              {pj.demoUrl && <a href={pj.demoUrl} className="btn-white" {...externalProps(true)}>Live demo ↗</a>}
-              {pj.repoUrl
-                ? <a href={pj.repoUrl} className="btn-outline" {...externalProps(true)}>View on GitHub ↗</a>
-                : <span className="cs-private">Source code is private · walkthrough on request</span>}
+        <div className="aurora" aria-hidden="true"><i /><i /><i /></div>
+        <div className="cs-container cs-hero-grid">
+          <div className="cs-hero-main">
+            <a href={back} className="cs-back">← {product ? 'All AI builds' : 'All projects'}</a>
+            <span className="tag">
+              {product ? 'Product case study · built with AI' : study ? 'Architecture case study' : 'Case study'}
+            </span>
+            <h1 className="cs-title">{clientName(pj)}</h1>
+            <p className="cs-lead">{study?.lead ?? pj.desc}</p>
+            <div className="ctas">
+              <a href="#contact" data-lead="email" onClick={openEmail(`About ${clientName(pj)}`)} className="pill pill-primary">
+                {product ? 'Ask for a walkthrough' : 'Discuss a similar project'} <span className="arr" aria-hidden="true">→</span>
+              </a>
+              <a href="#case-study" className="pill pill-ghost">Read the case study ↓</a>
             </div>
-          )}
+            {product && (
+              <div className="cs-links">
+                {pj.demoUrl && <a href={pj.demoUrl} className="btn-white" {...externalProps(true)}>Live demo ↗</a>}
+                {pj.repoUrl
+                  ? <a href={pj.repoUrl} className="btn-outline" {...externalProps(true)}>View on GitHub ↗</a>
+                  : <span className="cs-private">Source code is private · walkthrough on request</span>}
+              </div>
+            )}
+          </div>
+
+          <aside className="cs-panel" aria-label="At a glance">
+            <div className="cs-panel-head">
+              <span className="kicker">At a glance</span>
+              <Place place={pj.place} fallback={product ? 'My own product' : 'Remote client'} />
+            </div>
+            {pj.metrics && (
+              <dl className="cs-panel-metrics">
+                {pj.metrics.map((m) => (
+                  <div key={m.label}><dt>{m.label}</dt><dd data-count="">{m.value}</dd></div>
+                ))}
+              </dl>
+            )}
+            <dl className="cs-panel-facts">
+              {facts.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
+            </dl>
+            <div className="cs-panel-tech">
+              {(study?.tags ?? pj.tags).map((tg) => <Tech key={tg} name={tg} />)}
+            </div>
+          </aside>
         </div>
       </header>
 
-      {pj.metrics && (
-        <section className="cs-metrics-band" aria-label="Key numbers">
-          <div className="cs-container">
-            <dl className="cs-metrics">
-              {pj.metrics.map((m) => (
-                <div key={m.label} className="cs-metric">
-                  <dt className="cs-metric-label">{m.label}</dt>
-                  <dd className="cs-metric-value">{m.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
+      {hasScene(pj.slug) && (
+        <section className="cs-scene-band" aria-label="Project in one picture">
+          <div className="cs-container" data-reveal=""><ProjectScene slug={pj.slug} /></div>
         </section>
       )}
 
-      {study ? <DeepSections study={study} details={pj.details} /> : (
-        <section className="cs-body">
+      {study ? <DeepSections study={study} details={pj.details} pj={pj} /> : (
+        <section className="cs-body" id="case-study">
           <div className="cs-container cs-stack">
             <div className="cs-brief">
               <article className="cs-card" data-reveal="">
@@ -403,46 +482,64 @@ export default function CaseStudy({ project: pj }) {
               </article>
             </div>
             <div className="cs-built">
-              <SectionHead n="WHAT I BUILT" title="The work, piece by piece." />
+              <SectionHead n="What I built" title="The work, piece by piece" />
               <BuildList details={pj.details} />
             </div>
           </div>
         </section>
       )}
 
-      <section className="cs-pager-band">
-        <nav className="cs-container cs-pager" aria-label={product ? 'More AI builds' : 'More case studies'}>
-          <a href={caseStudyPath(prev)} className="cs-pager-link">
-            <span className="cs-pager-dir">← Previous</span>
-            <span className="cs-pager-title">{clientName(prev)}</span>
-            <span className="cs-pager-cat">{prev.category}</span>
-          </a>
-          <a href={caseStudyPath(next)} className="cs-pager-link cs-pager-link--next">
-            <span className="cs-pager-dir">Next →</span>
-            <span className="cs-pager-title">{clientName(next)}</span>
-            <span className="cs-pager-cat">{next.category}</span>
-          </a>
-        </nav>
+      <section className="cs-more" aria-labelledby="more-title">
+        <div className="cs-container">
+          <span className="tag">{product ? 'More AI builds' : 'More case studies'}</span>
+          <h2 className="h2" id="more-title">{product ? 'Other products I built' : "Related platforms I've built"}</h2>
+          <div className="project-grid">
+            {related.map((r, k) => (
+              <article key={r.slug} className="pcard" data-reveal="" data-delay={k * 70}>
+                <div className="pcard-top"><Place place={r.place} fallback={product ? 'My own product' : 'Remote client'} /><span className="num">{r.n}</span></div>
+                <span className="pcard-cat">{r.category}</span>
+                <h3><a href={caseStudyPath(r)} className="card-link">{clientName(r)}</a></h3>
+                {r.points
+                  ? <ul className="points">{r.points.map((pt) => <li key={pt}>{pt}</li>)}</ul>
+                  : <p>{r.desc}</p>}
+                {r.metrics
+                  ? <div className="metric"><strong data-count="">{r.metrics[0].value}</strong><span>{r.metrics[0].label}</span></div>
+                  : <div className="metric metric-plain"><span>{r.platform}</span></div>}
+                <span className="go" aria-hidden="true">Case study <em>→</em></span>
+              </article>
+            ))}
+          </div>
+
+          <nav className="cs-pager" aria-label={product ? 'Previous and next AI build' : 'Previous and next case study'}>
+            <a href={caseStudyPath(prev)} className="cs-pager-link">
+              <span className="cs-pager-dir">← Previous</span>
+              <span className="cs-pager-title">{clientName(prev)}</span>
+              <span className="cs-pager-cat">{prev.category}</span>
+            </a>
+            <a href={caseStudyPath(next)} className="cs-pager-link cs-pager-link--next">
+              <span className="cs-pager-dir">Next →</span>
+              <span className="cs-pager-title">{clientName(next)}</span>
+              <span className="cs-pager-cat">{next.category}</span>
+            </a>
+          </nav>
+        </div>
       </section>
 
-      <section className="cs-cta">
-        <div className="contact-glow" aria-hidden="true" />
-        <div className="cs-container cs-cta-inner">
-          {product ? (
-            <>
-              <h2 className="cs-cta-title">Want a <span className="gradient-text">walkthrough?</span></h2>
-              <p className="contact-lead">The code is private, but I&apos;m happy to demo the product and talk through the architecture. I&apos;m available immediately for senior roles and contract work.</p>
-            </>
-          ) : (
-            <>
-              <h2 className="cs-cta-title">Facing a similar <span className="gradient-text">commerce problem?</span></h2>
-              <p className="contact-lead">I&apos;m available immediately for senior Adobe Commerce roles and contract work. Tell me what you&apos;re building.</p>
-            </>
-          )}
-          <div className="contact-actions">
-            <a href={emailHref} className="btn-white">{emailLabel}</a>
-            <a href={linkedin.href} className="btn-outline" {...externalProps(linkedin.external)}>LinkedIn</a>
-            <a href={back} className="btn-outline">{product ? 'All AI builds' : 'All projects'}</a>
+      <section className="section contact" id="contact">
+        <div className="cs-container">
+          <div className="cta-card" data-reveal="">
+            <span className="tag tag-dark">Available immediately</span>
+            <h2 className="h2">{product ? <>Want a walkthrough? <span className="soft">Let&apos;s talk.</span></> : <>Facing a similar problem? <span className="soft">Let&apos;s talk.</span></>}</h2>
+            <p>
+              {product
+                ? 'The code is private, but I am happy to demo the product and talk through the architecture.'
+                : 'I am available immediately for senior Adobe Commerce roles and contract work. Tell me what you are building.'}
+            </p>
+            <div className="ctas">
+              <a href="#contact" data-lead="email" onClick={openEmail(`About ${clientName(pj)}`)} className="pill pill-light pill-solo">Email me <span className="arr" aria-hidden="true">→</span></a>
+              <a href={linkedin.href} className="pill pill-glass" {...externalProps(linkedin.external)}>LinkedIn</a>
+              <a href={back} className="pill pill-glass">{product ? 'All AI builds' : 'All projects'}</a>
+            </div>
           </div>
         </div>
       </section>

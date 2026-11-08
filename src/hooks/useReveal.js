@@ -15,8 +15,8 @@ export default function useReveal(rootRef) {
     below.forEach((el) => {
       const d = +(el.getAttribute('data-delay') || 0);
       el.style.opacity = '0';
-      el.style.transform = 'translateY(28px)';
-      el.style.transition = `opacity .8s cubic-bezier(.2,.7,.2,1) ${d}ms, transform .8s cubic-bezier(.2,.7,.2,1) ${d}ms, border-color .35s, box-shadow .35s`;
+      el.style.transform = 'translateY(12px)';
+      el.style.transition = `opacity .5s cubic-bezier(.22,1,.36,1) ${d}ms, transform .5s cubic-bezier(.22,1,.36,1) ${d}ms, border-color .2s`;
       el.dataset.hidden = '1';
     });
 
@@ -29,7 +29,7 @@ export default function useReveal(rootRef) {
           el.style.transform = '';
           delete el.dataset.hidden;
           // Hand transitions back to the stylesheet so hover effects work normally.
-          timers.push(setTimeout(() => { el.style.transition = ''; }, 1400));
+          timers.push(setTimeout(() => { el.style.transition = ''; }, 800));
         }
         obs.unobserve(el);
       }),

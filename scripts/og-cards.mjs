@@ -18,36 +18,34 @@ const tmp = mkdtempSync(join(tmpdir(), 'og-'));
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
 const card = ({ eyebrow, title, meta, tags, photo }) => `<!doctype html><html><head><meta charset="utf-8"><style>
-@font-face { font-family: 'Space Grotesk'; src: url('${fonts}/space-grotesk.woff2') format('woff2'); font-weight: 100 900; }
-@font-face { font-family: 'DM Sans'; src: url('${fonts}/dm-sans.woff2') format('woff2'); font-weight: 100 900; }
-@font-face { font-family: 'JetBrains Mono'; src: url('${fonts}/jetbrains-mono.woff2') format('woff2'); font-weight: 100 900; }
+@font-face { font-family: 'Inter Tight'; src: url('${fonts}/inter-tight.woff2') format('woff2'); font-weight: 100 900; }
+@font-face { font-family: 'Inter'; src: url('${fonts}/inter.woff2') format('woff2'); font-weight: 100 900; }
+@font-face { font-family: 'Geist Mono'; src: url('${fonts}/geist-mono.woff2') format('woff2'); font-weight: 100 900; }
 * { box-sizing: border-box; margin: 0; }
-body { width: 1200px; height: 630px; overflow: hidden; font-family: 'DM Sans', sans-serif; color: #e8e6f3;
-  background: radial-gradient(90% 90% at 85% 0%, #2a1f6b 0%, #0d1030 45%, #06070d 100%); position: relative; padding: 64px 72px; }
-.dots { position: absolute; inset: 0; background-image: radial-gradient(rgba(196,181,253,.16) 1px, transparent 1.3px); background-size: 24px 24px;
-  -webkit-mask-image: radial-gradient(60% 70% at 85% 30%, #000, transparent 75%); }
-.orbit { position: absolute; right: -120px; top: -90px; width: 560px; height: 560px; border-radius: 50%; border: 1px solid rgba(167,139,250,.35); }
-.orbit.two { right: -40px; top: 40px; width: 380px; height: 380px; border-style: dashed; border-color: rgba(103,232,249,.3); }
-.brand { position: relative; display: flex; align-items: center; gap: 14px; font-family: 'Space Grotesk'; font-weight: 600; font-size: 26px; }
-.mark { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; background: linear-gradient(135deg,#1a1440,#0d1330);
-  border: 1px solid rgba(167,139,250,.4); font-family: 'JetBrains Mono'; font-size: 17px; color: #c4b5fd; }
-.eyebrow { position: relative; margin-top: 70px; font-family: 'JetBrains Mono'; font-size: 20px; letter-spacing: .08em; text-transform: uppercase; color: #a78bfa; }
-h1 { position: relative; margin-top: 18px; max-width: 900px; font-family: 'Space Grotesk'; font-weight: 600; font-size: 84px; line-height: 1; letter-spacing: -.035em; color: #fff; }
-.meta { position: relative; margin-top: 22px; font-size: 26px; color: #b9b6cc; }
-.tags { position: absolute; left: 72px; bottom: 64px; display: flex; gap: 10px; }
-.tag { font-family: 'JetBrains Mono'; font-size: 18px; padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(167,139,250,.35); color: #ddd6fe; background: rgba(139,92,246,.1); }
-.has-photo .meta { max-width: 660px; }
-.photo { position: absolute; right: 80px; top: 118px; width: 300px; height: 360px; border-radius: 28px; object-fit: cover; object-position: 50% 22%;
-  border: 1px solid rgba(167,139,250,.45); box-shadow: 0 30px 80px -30px rgba(124,58,237,.7); }
-.url { position: absolute; right: 72px; bottom: 72px; font-family: 'JetBrains Mono'; font-size: 18px; color: #8f8daa; }
+body { width: 1200px; height: 630px; overflow: hidden; position: relative; padding: 64px 72px; font-family: 'Inter', sans-serif; color: #0d0f1c; -webkit-font-smoothing: antialiased;
+  background: #fff; background-image: linear-gradient(rgba(15,18,40,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(15,18,40,.05) 1px, transparent 1px); background-size: 40px 40px; }
+.brand { display: flex; align-items: center; gap: 14px; font: 600 26px 'Inter Tight'; letter-spacing: -.02em; }
+.mark { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; color: #fff; font: 700 22px 'Inter Tight'; letter-spacing: -.04em; background: linear-gradient(135deg, #5b3df5, #9b5cf6 55%, #ff6a3d); box-shadow: 0 10px 24px -8px rgba(91,61,245,.55); }
+.eyebrow { display: inline-flex; align-items: center; gap: 10px; margin-top: 64px; padding: 8px 16px; border-radius: 999px; background: #fff; box-shadow: inset 0 0 0 1px rgba(13,15,28,.12); font: 500 18px 'Geist Mono'; letter-spacing: .05em; text-transform: uppercase; color: #4b5068; }
+.eyebrow::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: #5b3df5; }
+h1 { margin-top: 22px; max-width: 920px; font: 600 80px/1.02 'Inter Tight'; letter-spacing: -.045em; }
+h1 span { color: #5b3df5; }
+.meta { margin-top: 22px; font-size: 28px; color: #4b5068; }
+.has-photo h1, .has-photo .meta { max-width: 640px; }
+.has-photo h1 { font-size: 66px; }
+.has-photo .eyebrow { margin-top: 48px; }
+.tags { position: absolute; left: 72px; bottom: 60px; display: flex; gap: 10px; }
+.tag { padding: 8px 16px; border-radius: 999px; font-size: 19px; color: #4b5068; background: #fff; box-shadow: inset 0 0 0 1px rgba(13,15,28,.14); }
+.ring { position: absolute; right: 72px; top: 70px; width: 360px; height: 360px; padding: 10px; border-radius: 50%; background: conic-gradient(from 200deg, #5b3df5, #ff6a3d, #ffb547, #8b74ff, #5b3df5); box-shadow: 0 30px 60px -20px rgba(91,61,245,.45); }
+.ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; object-position: 50% 20%; border: 7px solid #fff; display: block; }
+.url { position: absolute; right: 72px; bottom: 66px; font: 500 20px 'Geist Mono'; color: #5b3df5; }
 </style></head><body${photo ? ' class="has-photo"' : ''}>
-<div class="dots"></div><div class="orbit"></div><div class="orbit two"></div>
-<div class="brand"><span class="mark">&lt;ps/&gt;</span>Pushpendra Singh</div>
-${photo ? `<img class="photo" src="${portrait}" alt="">` : ''}
+<div class="brand"><span class="mark">ps</span>Pushpendra Singh Sodha</div>
+${photo ? `<div class="ring"><img src="${portrait}" alt=""></div>` : ''}
 <p class="eyebrow">${esc(eyebrow)}</p>
 <h1>${esc(title)}</h1>
 <p class="meta">${esc(meta)}</p>
-<div class="tags">${tags.slice(0, 4).map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+<div class="tags">${tags.slice(0, photo ? 3 : 4).map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>
 <span class="url">pushpendra.me</span>
 </body></html>`;
 
@@ -56,8 +54,8 @@ const cards = [
     slug: 'home',
     photo: true,
     eyebrow: 'Adobe Certified Expert',
-    title: 'Pushpendra Singh',
-    meta: 'Full-Stack Developer & Adobe Commerce Solution Architect · 12+ years',
+    title: 'Magento 2 & Adobe Commerce developer',
+    meta: '12+ years · PHP · Middle East, Australia, USA',
     tags: ['Available immediately', 'Adobe Commerce', 'Magento 2', 'Headless GraphQL'],
   },
   ...projects.map((pj) => ({

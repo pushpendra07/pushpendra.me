@@ -1,74 +1,34 @@
-import { useRef } from 'react';
-import HeroCanvas from '../components/HeroCanvas';
-import HeroVisual from '../components/HeroVisual';
-import { externalProps, getLinks } from '../lib/links';
+import AskBox from '../components/AskBox';
+import Portrait from '../components/Portrait';
+import { heroChecks } from '../data/profile';
 import { scrollToHash } from '../lib/scroll';
 
 export default function Hero() {
-  const heroRef = useRef(null);
-  const { linkedin, github, emailHref, email, resume } = getLinks();
-  const socials = [
-    { label: 'in/LinkedIn', title: linkedin.external ? 'LinkedIn' : 'LinkedIn URL not set yet', ...linkedin },
-    github.external && { label: 'gh/GitHub', title: 'GitHub', ...github },
-    { label: '@/Email', title: email || 'Email not set yet', href: emailHref, external: false },
-  ].filter(Boolean);
-
   return (
-    <section id="home" ref={heroRef} className="hero">
-      <div className="hero-bg" aria-hidden="true">
-        <div className="blob blob--1" />
-        <div className="blob blob--2" />
-        <div className="blob blob--3" />
-        <HeroCanvas heroRef={heroRef} />
-        <div className="hero-fade" />
-      </div>
-
-      <div className="hero-grid">
+    <section id="home" className="hero">
+      <div className="aurora" aria-hidden="true"><i /><i /><i /></div>
+      <div className="wrap hero-grid">
         <div className="hero-copy">
-          <div className="availability">
-            <span className="availability-dot" />
-            Available immediately · open to senior Adobe Commerce roles
-          </div>
-          {/* One h1 so the name and role are part of the page's main heading. */}
-          <h1 className="heading hero-heading">
-            <span className="hero-hi">Hi, I&apos;m Pushpendra Singh Sodha.</span>
-            <span className="hero-title">
-              I build <span className="gradient-text">scalable commerce</span> experiences.
-            </span>
-            <span className="hero-role">Adobe Certified Expert · Magento 2 &amp; PHP Developer · Adobe Commerce Solution Architect</span>
+          <span className="tag">Adobe Certified Expert · 12+ years · 7 countries</span>
+          {/* One h1 that carries the name, the role and the platform for search. */}
+          <h1 className="hero-title">
+            <span className="sr-only">Pushpendra Singh Sodha, Magento 2 and PHP developer. </span>
+            I build Adobe Commerce stores that <span className="accent">scale with your business.</span>
           </h1>
           <p className="hero-lead">
-            12+ years building enterprise Adobe Commerce platforms for retailers across the UAE, Kuwait, Saudi
-            Arabia, Lebanon, Australia, Russia and the USA — custom modules, ERP integrations, headless
-            commerce and performance work that holds up in production.
+            Magento 2 and PHP developer. I design the modules, ERP integrations and headless storefronts behind
+            retailers in the UAE, Kuwait, Saudi Arabia, Lebanon, Australia, Russia and the USA.
           </p>
-          <div className="hero-ctas">
-            <a href="#contact" onClick={scrollToHash} className="btn-primary">
-              Let&apos;s Talk <span aria-hidden="true">→</span>
-            </a>
-            <a href={resume.href} download={resume.download} onClick={scrollToHash} className="btn-ghost">
-              {resume.heroLabel}
-            </a>
+          <AskBox />
+          <div className="ctas">
+            <a href="#contact" onClick={scrollToHash} className="pill pill-primary">Discuss a role <span className="arr" aria-hidden="true">→</span></a>
+            <a href="#projects" onClick={scrollToHash} className="pill pill-ghost">See my work</a>
           </div>
-          <ul className="socials">
-            {socials.map((s) => (
-              <li key={s.label}>
-                <a
-                  href={s.href}
-                  onClick={scrollToHash}
-                  title={s.title}
-                  className="social"
-                  {...externalProps(s.external)}
-                >
-                  {/* The "in/" style prefix is decoration; screen readers just hear the name. */}
-                  <span aria-hidden="true">{s.label.split('/')[0]}/</span>{s.label.split('/')[1]}
-                </a>
-              </li>
-            ))}
+          <ul className="checks">
+            {heroChecks.map((c) => <li key={c}>{c}</li>)}
           </ul>
         </div>
-
-        <HeroVisual heroRef={heroRef} />
+        <Portrait />
       </div>
     </section>
   );

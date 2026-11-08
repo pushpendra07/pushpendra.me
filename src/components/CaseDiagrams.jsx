@@ -18,15 +18,6 @@ function Arrow({ id, className = 'dg-arrow' }) {
   );
 }
 
-function GlowFilter({ id }) {
-  return (
-    <filter id={id} x="-200%" y="-200%" width="500%" height="500%">
-      <feGaussianBlur stdDeviation="3" result="blur" />
-      <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-    </filter>
-  );
-}
-
 // Multi-line SVG label: "\n" in the text starts a new line, centred on y.
 function Label({ x, y, text, className, lineHeight = 15, anchor = 'middle' }) {
   const lines = text.split('\n');
@@ -62,11 +53,6 @@ export function ArchitectureDiagram({ data, id }) {
     <svg className="dg dg--wide" viewBox="0 0 1000 400" role="img" aria-label={label}>
       <defs>
         <Arrow id={`${id}-arrow`} />
-        <GlowFilter id={`${id}-glow`} />
-        <linearGradient id={`${id}-core`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#8b5cf6" />
-          <stop offset="1" stopColor="#5b21b6" />
-        </linearGradient>
       </defs>
 
       <text x="10" y="34" className="dg-col">{colA}</text>
@@ -82,7 +68,7 @@ export function ArchitectureDiagram({ data, id }) {
           : sysY.map((y) => <path key={y} d={`M570 ${mid} H${outX} V${y} H712`} />)}
       </g>
 
-      <g filter={`url(#${id}-glow)`}>
+      <g>
         {chY.map((y, i) => (
           <Packet key={y} path={`M180 ${y} H${inX} V${mid} H330`} dur="2.4s" begin={`${i * 0.8}s`} />
         ))}
@@ -105,7 +91,7 @@ export function ArchitectureDiagram({ data, id }) {
         </>
       )}
 
-      <rect x="330" y={top} width="240" height={bottom - top} rx="18" fill={`url(#${id}-core)`} className="dg-core" />
+      <rect x="330" y={top} width="240" height={bottom - top} rx="18" className="dg-core" />
       <text x="450" y="100" className="dg-core-title" textAnchor="middle">{data.core[0]}</text>
       <text x="450" y="124" className="dg-core-sub" textAnchor="middle">{data.core[1]}</text>
       {data.modules.map((m, i) => (
@@ -187,7 +173,6 @@ export function BranchDiagram({ d, id }) {
       aria-label={`${d.input}, then: ${d.question.join(' ')} Yes leads to ${d.yes}; no leads to ${d.no}${d.result ? `; both give ${d.result.join(' ')}` : ''}.`}>
       <defs>
         <Arrow id={`${id}-arrow`} />
-        <GlowFilter id={`${id}-glow`} />
       </defs>
       <g className="dg-wire" markerEnd={`url(#${id}-arrow)`}>
         <path d="M112 110 H150" />
@@ -198,7 +183,7 @@ export function BranchDiagram({ d, id }) {
       <text x="216" y="36" className="dg-sub">yes</text>
       <text x="216" y="196" className="dg-sub">no</text>
 
-      <g filter={`url(#${id}-glow)`}>
+      <g>
         <circle r="4.5" className="flow-anim flow-dot flow-dot--violet">
           <animateMotion path={yesPath} dur="5s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;.5;1" calcMode="linear" />
           <animate attributeName="opacity" values="1;1;0;0" keyTimes="0;.5;.51;1" dur="5s" repeatCount="indefinite" />
@@ -258,7 +243,6 @@ export function PipelineDiagram({ d, id }) {
       aria-label={`${d.nodes.map((s) => s.replace('\n', ' ')).join(' → ')}${d.both ? ', in both directions' : ''}${d.loop ? `; ${d.loop.label}` : ''}.`}>
       <defs>
         <Arrow id={`${id}-arrow`} className="dg-arrow dg-arrow--cyan" />
-        <GlowFilter id={`${id}-glow`} />
       </defs>
       <g className="dg-wire dg-wire--cyan" markerEnd={`url(#${id}-arrow)`} markerStart={d.both ? `url(#${id}-arrow)` : undefined}>
         {xs.slice(1).map((x, i) => <path key={x} d={`M${xs[i] + w + (d.both ? 4 : 0)} ${cy} H${x - 4}`} />)}
@@ -268,7 +252,7 @@ export function PipelineDiagram({ d, id }) {
           <path d={`M${cx(d.loop.at) - 16} ${cy + h / 2 + 2} C ${cx(d.loop.at) - 42} ${cy + 96}, ${cx(d.loop.at) + 42} ${cy + 96}, ${cx(d.loop.at) + 16} ${cy + h / 2 + 4}`} />
         </g>
       )}
-      <g filter={`url(#${id}-glow)`}>
+      <g>
         <Packet path={path} dur={dur} className="flow-dot" r={4.5} />
         {d.both && <Packet path={back} dur={dur} begin={`${(1 + n * 0.9) / 2}s`} className="flow-dot flow-dot--violet" r={4} />}
       </g>
