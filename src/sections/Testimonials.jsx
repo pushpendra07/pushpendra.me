@@ -5,12 +5,10 @@ import { externalProps } from '../lib/links';
 export default function Testimonials() {
   if (!testimonials.length) return null;
   return (
-    <section id="testimonials" className="testimonials">
-      <div className="container section-stack">
-        <div className="heading" data-reveal="" style={{ maxWidth: 640 }}>
-          <span className="eyebrow">RECOMMENDATIONS</span>
-          <h2 className="h2">What colleagues and clients say.</h2>
-        </div>
+    <section id="testimonials" className="section">
+      <div className="wrap">
+        <span className="tag">Recommendations</span>
+        <h2 className="h2" data-reveal="">What colleagues and clients say</h2>
         <div className="quote-grid">
           {testimonials.map((t, i) => (
             <figure key={t.name} className="quote" data-reveal="" data-delay={(i % 3) * 100}>

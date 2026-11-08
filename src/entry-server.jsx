@@ -21,7 +21,6 @@ const person = {
   jobTitle: 'Magento 2 & PHP Developer, Adobe Commerce Solution Architect',
   url: `${SITE}/`,
   image: `${SITE}/images/portrait-760.jpg`,
-  email: `mailto:${config.email}`,
   sameAs: [config.linkedinUrl, config.githubUrl].filter(Boolean),
   address: { '@type': 'PostalAddress', addressLocality: 'Bikaner', addressRegion: 'Rajasthan', addressCountry: 'IN' },
   worksFor: { '@type': 'Organization', name: experience[0].employer.split(' · ')[0] },
@@ -33,6 +32,7 @@ const person = {
     recognizedBy: { '@type': 'Organization', name: 'Adobe' },
     ...(c.verifyUrl && { url: c.verifyUrl }),
   })),
+  award: certs.filter((c) => c.meta !== 'Adobe').map((c) => `${c.title} — ${c.issuer} (${c.meta.replace('Award · ', '')})`),
   knowsAbout: [...new Set(['Magento', 'Adobe Commerce', 'PHP', ...skills.filter((sk) => !sk.learning).flatMap((sk) => sk.items)])].slice(0, 30),
 };
 

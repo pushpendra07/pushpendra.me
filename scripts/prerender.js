@@ -2,7 +2,7 @@
 // HTML and inlines the CSS so each page paints before any JavaScript or
 // stylesheet request finishes.
 import { createHash } from 'node:crypto';
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -23,6 +23,15 @@ for (const [, body] of template.matchAll(/<script>([\s\S]*?)<\/script>/g)) {
   const hash = `'sha256-${createHash('sha256').update(body).digest('base64')}'`;
   if (!headers.includes(hash)) throw new Error(`prerender: add ${hash} to script-src in public/_headers`);
 }
+
+// Each page type loads its own chunk after the entry script; preloading it (and the chunk the
+// two pages share) removes that extra round trip before hydration.
+const assets = readdirSync(resolve(dist, 'assets'));
+const chunk = (name) => assets.find((a) => a.startsWith(`${name}-`) && a.endsWith('.js'));
+const preloads = (names) => names.map(chunk).filter(Boolean)
+  .map((a) => `<link rel="modulepreload" crossorigin href="/assets/${a}">`).join('');
+const HOME_CHUNKS = preloads(['HomePage', 'Footer']);
+const CASE_CHUNKS = preloads(['CaseStudyPage', 'Footer']);
 
 const attr = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
@@ -58,7 +67,7 @@ function write(path, html, data) {
   const dir = resolve(dist, `.${path}`);
   mkdirSync(dir, { recursive: true });
   const page = html
-    .replace('</head>', `${jsonLd(data)}</head>`)
+    .replace('</head>', `${path === '/' ? HOME_CHUNKS : CASE_CHUNKS}${jsonLd(data)}</head>`)
     .replace('<div id="root"></div>', `<div id="root">${markup}</div>`);
   writeFileSync(resolve(dir, 'index.html'), page);
 }

@@ -1,6 +1,7 @@
 // Site configuration.
 export const config = {
-  email: 'pushpendra07@yahoo.com',
+  // Email, reversed and base64-encoded so scrapers cannot read it (decoded in src/lib/email.js).
+  emailEncoded: 'bW9jLm9vaGF5QDcwYXJkbmVwaHN1cA==',
   linkedinUrl: 'https://www.linkedin.com/in/pushpendra07/',
   // Optional — the GitHub links stay hidden until this is set.
   githubUrl: 'https://github.com/pushpendra07',
@@ -18,13 +19,11 @@ export const config = {
 };
 
 export const nav = [
-  ['home', 'Home'],
-  ['about', 'About'],
+  ['projects', 'Work'],
   ['experience', 'Experience'],
-  ['projects', 'Projects'],
-  ['ai-builds', 'AI Builds'],
   ['skills', 'Skills'],
-  ['certifications', 'Certifications'],
+  ['ai-builds', 'AI builds'],
+  ['how', 'How I work'],
   ['contact', 'Contact'],
 ];
 
@@ -48,20 +47,20 @@ export const experience = [
   {
     title: 'Senior Software Developer (Tech Lead responsibilities)',
     employer: 'Krish TechnoLabs · Remote',
-    dates: 'Sep 2021 — Present',
+    dates: 'Sep 2021 to present',
     points: [
       'Own end-to-end delivery of Adobe Commerce platforms for international clients: solution design, custom modules, ERP and data migration, integrations, deployment and production support.',
       'Primary technical point of contact, turning complex business requirements into scalable architecture, technical designs and delivery plans.',
       'Lead performance work with New Relic, PageSpeed Insights and GTmetrix across page rendering, database queries, checkout and GraphQL response times.',
       'Run codebase and custom-module audits for duplicated logic, conflicting overrides and security gaps, and set coding, PSR, security-review and UAT standards.',
-      'Standardise reusable module patterns — service contracts, repository and API interfaces, UI DataProvider modifiers — across client projects.',
+      'Standardise reusable module patterns across client projects: service contracts, repository and API interfaces, and UI DataProvider modifiers.',
     ],
     stack: ['Adobe Commerce Cloud', 'Magento 2', 'GraphQL', 'RabbitMQ', 'SAP', 'New Relic'],
   },
   {
     title: 'Senior Software Developer',
     employer: 'Sunarc Technologies · Bikaner',
-    dates: 'Mar 2014 — Sep 2021',
+    dates: 'Mar 2014 to Sep 2021',
     points: [
       'Designed RESTful APIs and backend integrations for third-party services on Magento 2 stores.',
       'Resolved architectural, database and application-performance bottlenecks to improve scalability and stability.',
@@ -83,9 +82,11 @@ export const projectFilters = [
 ];
 
 // Each project also gets a case-study page at /projects/<slug>/.
+// `points`: three short lines shown on the home page card; `desc` is the full summary.
 export const projects = [
   {
     n: '01', category: 'Omnichannel grocery', slug: 'grandiose-supermarket', focus: ['headless', 'erp', 'fulfilment'], title: 'Grandiose Supermarket', alias: 'Omnichannel grocery platform', place: 'Dubai, UAE', platform: 'Magento Open Source',
+    points: ['Talon.One and Magento discounts, switchable per store', 'In-store picker and dispatch app on GraphQL', 'SAP ERP fed by every order event through queues'],
     desc: 'Dual discount-engine architecture (Talon.One + Zinrelo), a from-scratch in-store Picker/Dispatch app, SAP ERP wired into every order event, and multiple GraphQL modules powering a headless storefront.',
     problem: 'Store picking, substitutions, promotions, loyalty and SAP all had to agree on the same cart and stock, across many physical stores selling the same SKUs.',
     solution: 'A per-store switch handing cart discounts to Talon.One, multiple GraphQL modules behind a Picker & Dispatcher app, rewritten MSI reservations, and SAP plus a separate queue feeding a live operations dashboard.',
@@ -110,6 +111,7 @@ export const projects = [
   },
   {
     n: '02', category: 'Fulfilment', slug: 'fantasy-world-toys', focus: ['erp', 'fulfilment'], title: 'Fantasy World Toys', alias: 'Toy retail fulfilment platform', place: 'Kuwait City, Kuwait', platform: 'Adobe Commerce On-Premise',
+    points: ['Led a team of 2–3 developers', 'Four delivery modes, each with its own payment rules', 'Dynamics AX bridge plus Knet, UPay and Tabby payments'],
     desc: 'Led a 2–3 developer team building a multi-mode delivery engine, a Microsoft Dynamics AX ERP bridge and Kuwait-specific payments across multiple custom modules.',
     problem: 'A new fulfilment model needed Express, Home Delivery, Click & Collect and Curbside options, each with its own payment rules and customer notifications.',
     solution: 'A multi-mode delivery engine with SMS milestones, Knet, UPay, CyberSource and Tabby payments, and a Dynamics AX bridge for categories, customers and orders.',
@@ -134,6 +136,7 @@ export const projects = [
   },
   {
     n: '03', category: 'ERP integration', slug: 'antoine-online', focus: ['erp', 'catalog'], title: 'Antoine Online', alias: 'ERP-integrated retail platform', place: 'Beirut, Lebanon', platform: 'Adobe Commerce Cloud',
+    points: ['Two-way ERP sync for products, prices, stock and orders', 'Custom router for Arabic product URLs', 'Back-order bug fixed at the root in the CSV import'],
     desc: 'Two-way ERP sync, Arabic-language product URLs, and a multi-website switcher with country-based shipping restrictions, across multiple custom modules.',
     problem: 'Arabic product URLs were stripped by Magento’s default URL sanitiser, and a recurring back-order bug kept surfacing through imports.',
     solution: 'A custom front-controller router for Arabic URLs, a root-cause CSV import patch, and a two-way ErpBridge sync with an admin monitoring grid.',
@@ -153,6 +156,7 @@ export const projects = [
   },
   {
     n: '04', category: 'Migration', slug: 'toolmart', focus: ['migration', 'catalog'], title: 'ToolMart', alias: 'Tools retailer migration', place: 'Perth, Australia', platform: 'Adobe Commerce On-Premise',
+    points: ['Led the Magento 1 to Adobe Commerce migration', 'Rebuilt the product page end to end', 'Request-a-Quote and Request-a-Catalogue features'],
     desc: 'Led migration architecture from Magento 1 to Adobe Commerce On-Premise, rebuilt the PDP end-to-end, and delivered Request-a-Quote and Request-a-Catalogue across multiple custom modules.',
     problem: 'An ageing Magento 1 store with a fragmented mix of third-party extensions and business logic that had to survive the move.',
     solution: 'Full data migration, rebuilt themes and extensions, a new product page, and five purchased extensions extended to match site behaviour.',
@@ -173,6 +177,7 @@ export const projects = [
   },
   {
     n: '05', category: 'Headless PWA', slug: 'switch', focus: ['headless'], title: 'Switch', alias: 'Headless PWA commerce backend', place: 'Saudi Arabia', platform: 'Adobe Commerce (GraphQL)',
+    points: ['GraphQL-only backend for a headless PWA', 'Schema extended across 8 storefront domains', 'Cart bug traced to the mutation resolver and fixed'],
     desc: 'GraphQL-only backend for a fully headless PWA storefront, centred on a drag-and-drop dashboard builder.',
     problem: 'Customisable product options were silently dropped on add-to-cart, but only through GraphQL.',
     solution: 'Traced the bug to the cart-mutation resolver rather than the cart logic and fixed it with a narrowly scoped override, alongside a schema extended across every storefront domain.',
@@ -191,8 +196,9 @@ export const projects = [
   },
   {
     n: '06', category: 'B2B catalog', slug: 'sterling-machinery', focus: ['migration', 'b2b', 'catalog'], title: 'Sterling Machinery', alias: 'Heavy-equipment dealer platform', place: 'USA', platform: 'Magento Open Source',
+    points: ['Nine custom product data entities', 'Migrated custom PHP to Magento 1, then Magento 2', 'Five buy, sell and wanted lead pipelines'],
     desc: 'A master/child machinery data architecture with nine custom product entities, a full buy/sell/wanted lead-capture pipeline, and a custom-skinned admin theme.',
-    problem: 'Complex machinery data — specs, job costing, capacity ratings and repair history — on a platform that started as custom PHP.',
+    problem: 'Complex machinery data (specs, job costing, capacity ratings and repair history) on a platform that started as custom PHP.',
     solution: 'Migration from custom PHP to Magento 1 and then Magento 2, nine product data entities on the product form, and Cart2Quote-based RFQs.',
     tags: ['Architecture', 'Migration', 'Cart2Quote', 'Lead capture'],
     metrics: [
@@ -213,6 +219,7 @@ export const projects = [
   },
   {
     n: '07', category: 'Fashion & beauty', slug: 'minamin', focus: ['erp', 'catalog'], title: 'Minamin', alias: 'Fashion & beauty storefronts', place: 'Kuwait', platform: 'Adobe Commerce (Magento 2)',
+    points: ['Two fashion and beauty storefronts', 'ERP sync split into cron and a RabbitMQ queue', 'Banner and product-label admin built from scratch'],
     desc: 'Two fashion and beauty storefronts with heavy LESS/SCSS theming, split ERP sync, and from-scratch banner and product-label admin systems.',
     problem: 'Immediate order operations were tangled with slow background ERP exports.',
     solution: 'ERP sync split into a scheduled cron push for inventory, prices, products and orders, and a separate async RabbitMQ order-export queue.',
@@ -233,6 +240,7 @@ export const projects = [
   },
   {
     n: '08', category: 'Marketplace', slug: 'aquanexus', focus: ['b2b', 'fulfilment'], title: 'Aquanexus', alias: 'Multi-vendor marketplace', place: 'USA', platform: 'Magento Open Source',
+    points: ['Eight vendor storefronts on one Magento instance', 'Custom admin ACL re-scoping about 40 grids', 'Payment links and automated payment reminders'],
     desc: 'A multi-vendor marketplace with a from-scratch admin ACL and a shared theme framework powering 8 related storefronts.',
     problem: 'Running many vendor sites from one Magento instance without leaking orders, customers or reports between them.',
     solution: 'AdvPermission, a from-scratch ACL scoping admin data by website and a custom split attribute, rewriting about 40 admin grid collections and blocks.',
@@ -253,6 +261,7 @@ export const projects = [
   },
   {
     n: '09', category: 'Localisation', slug: 'kalombo', focus: ['catalog'], title: 'Kalombo', alias: 'Russian e-commerce storefront', place: 'Moscow, Russia', platform: 'Magento Open Source',
+    points: ['Performance-first Magento architecture', 'Russian payments and local address entry', 'Russian and English SEO with JSON-LD schema'],
     desc: 'Performance-first architecture with Russia-specific payments, localised address entry and full homepage SEO and schema tooling.',
     problem: 'Russian address entry, local payment methods and bilingual SEO, without giving up page speed.',
     solution: 'Auto Address API integration, Russia-specific payments, RU/EN Open Graph and JSON-LD tagging, and unused modules stripped out.',
@@ -271,6 +280,7 @@ export const projects = [
   },
   {
     n: '10', category: 'Grocery & retail', slug: 'punjabstore', focus: ['catalog'], title: 'Punjabstore', alias: 'Grocery storefront & app backend', place: '', platform: 'Magento Open Source',
+    points: ['Configurable products priced from their cheapest option', 'Delivery and discount messages in the mini-cart', 'Mobile-app version-check API'],
     desc: 'Configurable-product pricing, mini-cart messaging and PDF invoice localisation for a Codazon-themed storefront.',
     problem: 'Configurable products showed misleading prices, and invoices didn’t match local business terms.',
     solution: 'Lowest-child configurable pricing, delivery and discount messaging in the mini-cart, and relabelled PDF invoice fields.',
@@ -284,6 +294,7 @@ export const projects = [
   },
   {
     n: '11', category: 'B2B quoting', slug: 'siemens', focus: ['b2b'], title: 'Siemens', alias: 'B2B request-a-quote storefront', place: '', platform: 'Magento Open Source',
+    points: ['Request-a-Quote flow replacing cart and checkout', 'Prices hidden for quote-only products', 'Admin category import and export tools'],
     desc: 'A parallel Request-a-Quote system replacing cart and checkout for quote-eligible products, with sitewide price hiding and admin category tooling.',
     problem: 'Quote-eligible products needed a buying path with no public prices and no standard checkout.',
     solution: 'A quote flow that replaces cart, mini-cart and checkout for flagged products, built on Magecomp Emailquotepro.',
@@ -296,6 +307,7 @@ export const projects = [
   },
   {
     n: '12', category: 'Print & signage', slug: '2d-layer', focus: ['b2b', 'catalog'], title: '2D Layer', alias: 'Print product configurator', place: '', platform: 'Magento Open Source',
+    points: ['Build-and-price flow for custom-cut print products', 'Request-a-Quote mini-cart with size rules', 'Custom theme on top of Luma'],
     desc: 'A build-and-price flow for custom-cut printed film and vinyl products, with a Request-a-Quote mini-cart and a from-scratch theme.',
     problem: 'Layered, custom-cut print products can’t be priced as fixed SKUs.',
     solution: 'A configurable build-and-price flow with its own AJAX add-to-cart endpoint, and zero-price quote-only items with per-item size and quantity rules.',
@@ -449,64 +461,107 @@ export const education = [
   { degree: 'M.Sc. Information Technology', short: 'M.Sc. IT', school: 'Maharaja Ganga Singh University' },
 ];
 
-// Hero editor snippets. Token kinds: k keyword, t type, f function, v variable, p punctuation.
-// `stack` is the technology chips orbiting the editor while that snippet types; a chip
-// lights up once the typed code contains its `match` (no match: when the snippet ends);
-// `icon` names a glyph in src/components/TechIcon.jsx.
-export const snippets = [
-  { file: 'CommerceSolution.php', stack: [
-    { label: 'Adobe Commerce', icon: 'bag', color: '#a78bfa', match: 'CommerceSolution' },
-    { label: 'Magento 2', icon: 'cube', color: '#f97316', match: 'build(' },
-    { label: 'PHP', icon: 'code', color: '#818cf8', match: 'public function' },
-    { label: 'AWS', icon: 'cloud', color: '#fbbf24', match: 'createScalable' },
-    { label: 'Azure', icon: 'cloud', color: '#60a5fa', match: 'createScalable' },
-    { label: 'Redis', icon: 'db', color: '#f87171', match: 'return' },
-    { label: 'Varnish', icon: 'layers', color: '#93c5fd', match: '$this->' },
-    { label: 'Fastly CDN', icon: 'zap', color: '#fb7185', match: '();' },
-  ], code: [
-    [['class ', 'k'], ['CommerceSolution', 't']],
-    [['{', 'p']],
-    [['    public function ', 'k'], ['build', 'f'], ['(): ', 'p'], ['Solution', 't']],
-    [['    {', 'p']],
-    [['        return ', 'k'], ['$this', 'v'], ['->', 'p'], ['createScalableExperience', 'f'], ['();', 'p']],
-    [['    }', 'p']],
-    [['}', 'p']],
-  ] },
-  { file: 'OrderExportConsumer.php', stack: [
-    { label: 'RabbitMQ', icon: 'queue', color: '#fb923c', match: 'OrderExportConsumer' },
-    { label: 'SAP & ERP', icon: 'sync', color: '#34d399', match: '->erp->' },
-    { label: 'Logistics', icon: 'truck', color: '#fbbf24', match: 'export(' },
-    { label: 'REST APIs', icon: 'plug', color: '#93c5fd', match: 'process(' },
-    { label: 'Payments', icon: 'card', color: '#f0abfc', match: 'OrderInterface' },
-    { label: 'MySQL', icon: 'db', color: '#38bdf8', match: '$order' },
-    { label: 'New Relic', icon: 'pulse', color: '#4ade80' },
-    { label: 'Performance', icon: 'gauge', color: '#67e8f9' },
-  ], code: [
-    [['class ', 'k'], ['OrderExportConsumer', 't']],
-    [['{', 'p']],
-    [['    public function ', 'k'], ['process', 'f'], ['(', 'p']],
-    [['        OrderInterface ', 't'], ['$order', 'v']],
-    [['    ): ', 'p'], ['void', 't'], [' {', 'p']],
-    [['        $this', 'v'], ['->erp->', 'p'], ['export', 'f'], ['($order);', 'p']],
-    [['    }', 'p']],
-    [['}', 'p']],
-  ] },
-  { file: 'cart.graphql', stack: [
-    { label: 'GraphQL', icon: 'graph', color: '#f0abfc', match: 'query' },
-    { label: 'JavaScript', icon: 'js', color: '#facc15', match: 'CartTotals' },
-    { label: 'React.js', icon: 'atom', color: '#67e8f9', match: 'cart(' },
-    { label: 'jQuery', icon: 'braces', color: '#60a5fa', match: 'prices' },
-    { label: 'KnockoutJS', icon: 'braces', color: '#f87171', match: 'prices' },
-    { label: 'Claude', icon: 'spark', color: '#fb923c', match: 'value' },
-    { label: 'ChatGPT', icon: 'chat', color: '#34d399', match: 'currency' },
-    { label: 'AI search', icon: 'search', color: '#c4b5fd', match: 'grand_total' },
-  ], code: [
-    [['query ', 'k'], ['CartTotals', 'f'], ['(', 'p'], ['$id', 'v'], [': ', 'p'], ['String!', 't'], [') {', 'p']],
-    [['  cart', 'f'], ['(cart_id: ', 'p'], ['$id', 'v'], [') {', 'p']],
-    [['    prices ', 'f'], ['{', 'p']],
-    [['      grand_total ', 'f'], ['{ value currency }', 'p']],
-    [['    }', 'p']],
-    [['  }', 'p']],
-    [['}', 'p']],
-  ] },
+// ---------- Home page copy and visuals ----------
+
+export const heroChecks = [
+  'Custom modules and service contracts',
+  'SAP, Dynamics AX and RabbitMQ',
+  'Headless GraphQL and PWA',
+  'Performance, audits and code reviews',
+];
+
+// Placeholder lines the hero prompt box cycles through: real problems the work solves.
+export const askPrompts = [
+  'Our checkout is slow',
+  'We need SAP connected to Magento',
+  'Migrate us from Magento 1',
+  'Build a headless GraphQL storefront',
+  'Audit our custom modules',
+];
+
+// Featured project (the first project): one order through the systems built for it, and its numbers.
+export const featuredFlow = [
+  ['Order placed', 'Mobile app · GraphQL'],
+  ['Discount applied', 'Talon.One · per-store switch'],
+  ['Stock reserved', 'Multi-source inventory'],
+  ['Picked in store', 'Picker app, aisle by aisle'],
+  ['Sent to SAP', 'RabbitMQ · auto-retry'],
+  ['Delivered', 'OTP-verified handoff'],
+];
+export const featuredStats = [
+  { kicker: 'ERP import', value: '20,000', label: 'SKUs per import batch, at most' },
+  { kicker: 'Delivery', value: '4', label: 'modes: Express, Home, Click & Collect, Curbside' },
+];
+export const featuredExport = { kicker: 'Catalog export', value: '3–5 s', label: 'to export 50,000 products', before: 'Timed out', after: '3–5 s' };
+
+export const howIWork = [
+  {
+    title: 'Understand the business',
+    text: 'I map how orders, stock and money really move before writing code.',
+    example: 'Grandiose: pickers, substitutions and SAP had to agree on one cart across many stores',
+  },
+  {
+    title: 'Design the architecture',
+    text: 'I extend Magento the way it was built to be extended: service contracts, plugins and queues.',
+    example: 'A per-store switch let Talon.One and Magento run side by side with no double discounts',
+  },
+  {
+    title: 'Ship and support',
+    text: 'I own code review, UAT, release and production support, so the store keeps working after launch.',
+    example: 'Every call to SAP, kitchens and couriers is queued, logged and retried, so no order is lost',
+  },
+];
+
+export const codeBenefits = [
+  ['Orders never get lost.', 'Every call to SAP, kitchens and couriers is queued, logged and retried.'],
+  ['Pages stay fast.', 'Redis, Varnish and Fastly tuning, profiled in New Relic.'],
+  ['Upgrades stay cheap.', 'Plugins and service contracts instead of core rewrites.'],
+];
+
+// Keys into src/data/brands.js: the technology strip under the hero and the chips around the portrait.
+export const techStrip = ['adobe', 'magento', 'php', 'graphql', 'rabbitmq', 'sap', 'redis', 'mysql', 'newrelic', 'fastly', 'react', 'docker'];
+export const heroChips = [
+  ['magento', 'Magento 2', 'Adobe Commerce'],
+  ['graphql', 'GraphQL', 'Headless storefronts'],
+  ['rabbitmq', 'RabbitMQ', 'Queued order export'],
+  ['sap', 'SAP ERP', 'Orders, stock, refunds'],
+];
+
+// Skills told as a scroll story (src/sections/Skills.jsx). Every chip comes from `skills` above.
+export const skillStory = [
+  {
+    key: 'platform', label: 'The platform', title: 'It starts with', accent: 'Adobe Commerce.',
+    text: 'Cloud or on-premise, Magento 2 or Open Source. Twelve years on the same platform, from Magento 1 to today.',
+    chips: ['Adobe Commerce Cloud', 'On-Premise', 'Magento 2', 'Magento Open Source'],
+  },
+  {
+    key: 'code', label: 'The code', title: 'Custom modules,', accent: 'built the Magento way.',
+    text: 'Plugins and observers instead of core rewrites, service contracts, EAV, indexers and MSI. PHP with OOP and design patterns.',
+    chips: ['PHP', 'OOP', 'Design patterns', 'Plugins & observers', 'EAV', 'Indexers', 'MSI'],
+  },
+  {
+    key: 'systems', label: 'The systems', title: 'Then it talks to', accent: 'everything else.',
+    text: 'ERPs, payments and loyalty, over REST, SOAP and message queues, so orders and stock stay in step.',
+    chips: ['SAP', 'Dynamics AX', 'Payment gateways', 'Loyalty & promotions', 'REST', 'SOAP', 'RabbitMQ'],
+  },
+  {
+    key: 'front', label: 'The storefront', title: 'Headless when', accent: 'it needs to be.',
+    text: 'GraphQL resolvers behind a PWA or React front end, or the classic theme stack with KnockoutJS and layout XML.',
+    chips: ['GraphQL resolvers', 'PWA', 'React.js', 'KnockoutJS', 'RequireJS', 'LESS / SCSS', 'Layout XML'],
+  },
+  {
+    key: 'speed', label: 'The speed', title: 'Then it', accent: 'gets fast.',
+    text: 'Caching at every layer, then New Relic and slow-query analysis to find what is left. N+1 queries go first.',
+    chips: ['Fastly CDN', 'Varnish', 'Redis', 'MySQL', 'New Relic', 'Slow-query analysis', 'N+1 fixes'],
+  },
+  {
+    key: 'secure', label: 'The safety', title: 'And it', accent: 'stays secure.',
+    text: 'Code audits and hardening, a strict CSP, PCI in mind, and XSS and injection fixes before they ship.',
+    chips: ['Code audits', 'Security hardening', 'CSP', 'PCI', 'XSS & injection fixes'],
+  },
+  {
+    key: 'team', label: 'The delivery', title: 'Shipped with a team,', accent: 'not just code.',
+    text: 'Estimates, code reviews, UAT and production support, with PSR standards in Git, Bitbucket, JIRA and Composer.',
+    chips: ['Estimation', 'Code reviews', 'UAT', 'Production support', 'Mentoring', 'PSR standards'],
+  },
 ];

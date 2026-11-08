@@ -1,4 +1,4 @@
-import { config } from './profile';
+import { config } from './profile.js';
 
 // In-depth case-study content, keyed by project slug. Every section is optional;
 // the page renders and numbers only the sections a project has. Content comes
@@ -18,7 +18,7 @@ export const caseStudies = {
       ['Channels', 'Website, mobile apps, in-store staff app'],
       ['My focus', 'Backend architecture, payments, loyalty, ERP & delivery integrations'],
     ],
-    highlightsTitle: 'Five things that set this platform apart.',
+    highlightsTitle: 'Five things that set this platform apart',
     highlights: [
       { icon: 'card', title: 'Multi-rail checkout', text: 'Cards, Apple Pay, wallet, gift cards and loyalty points on one order.' },
       { icon: 'tag', title: 'Two promotion engines', text: 'Magento rules or Talon.One, switchable per store.' },
@@ -27,7 +27,7 @@ export const caseStudies = {
       { icon: 'retry', title: 'Self-healing integrations', text: 'Queued, logged and auto-retried calls to external systems.' },
     ],
     architecture: {
-      title: 'One GraphQL front door, queues behind it.',
+      title: 'One GraphQL front door, queues behind it',
       intro: 'Every channel talks to Magento through GraphQL APIs. Slow or external systems sit behind message queues, so they never block an order.',
       channels: ['Website', 'Mobile apps', 'Picker app'],
       inbound: 'GraphQL APIs',
@@ -43,7 +43,7 @@ export const caseStudies = {
       notes: ['Klevu search · SMS · push', 'Talon.One · Zinrelo', 'Logged & auto-retried on failure'],
       callout: 'Many orders are picked from real store shelves by staff, delivered the same hour, and paid for in several ways at once.',
     },
-    capabilitiesTitle: 'The whole grocery business, app to doorstep.',
+    capabilitiesTitle: 'The whole grocery business, app to doorstep',
     capabilities: [
       ['Payments', 'Cards, Apple Pay, saved cards, wallet, gift cards and loyalty points on one order. Cash-on-delivery orders can switch to online payment later.'],
       ['Loyalty & promotions', 'Loyalty rewards work like normal cart discounts. Promotions run on Magento’s engine or Talon.One, per store. Cashback works with store credit.'],
@@ -57,8 +57,8 @@ export const caseStudies = {
       ['Compliance & security', 'Age-restricted products (such as alcohol and tobacco) blocked at catalog level. A reflected-injection issue in a third-party component fixed, and two silent core-class override collisions caught before production.'],
     ],
     flow: {
-      label: 'HOW AN ORDER FLOWS',
-      title: 'From the app to a picker to the door.',
+      label: 'How an order flows',
+      title: 'From the app to a picker to the door',
       intro: 'From the customer’s app to a store picker, then to a delivery partner or the store’s own driver.',
       steps: [
         ['Assign', 'Order goes to a picker at the right store; reassigned automatically if there’s no response.'],
@@ -76,7 +76,7 @@ export const caseStudies = {
       ],
     },
     challenges: {
-      title: 'Five problems that shaped the architecture.',
+      title: 'Five problems that shaped the architecture',
       intro: 'Each solution was chosen over simpler options that would have failed at scale.',
       items: [
         ['Two discount engines', 'Move promotions to Talon.One without switching off Magento’s engine.', 'A per-store switch sends each cart to one engine only; every cart change keeps Talon.One in sync.', 'Stores can use either engine, with no risk of double discounts.'],
@@ -146,7 +146,7 @@ export const caseStudies = {
       { icon: 'layers', title: 'Deep extension work', text: '15 purchased extensions adapted across 62 override touch-points.' },
     ],
     architecture: {
-      title: 'One delivery engine, wired to local payments and the ERP.',
+      title: 'One delivery engine, wired to local payments and the ERP',
       intro: 'Shoppers reach the store on the web or through an in-store kiosk. Delivery mode, payment and notifications are handled in Magento; payments, search and the ERP sit behind integrations.',
       channels: ['Website', 'In-store kiosk'],
       inbound: 'REST & GraphQL',
@@ -176,8 +176,8 @@ export const caseStudies = {
       ['Orders & marketing', 'Order tracking, printable orders, UTM link tracking and coupon-code campaigns.'],
     ],
     flow: {
-      label: 'HOW AN ORDER MOVES',
-      title: 'Delivery mode first, everything else follows.',
+      label: 'How an order moves',
+      title: 'Delivery mode first, everything else follows',
       intro: 'The delivery mode the customer picks shapes the rest of the order.',
       steps: [
         ['Choose', 'Customer picks Express, Home Delivery, Click & Collect or Curbside.'],
@@ -187,7 +187,7 @@ export const caseStudies = {
       ],
     },
     challenges: {
-      title: 'What made this build hard.',
+      title: 'What made this build hard',
       intro: 'A new fulfilment model, local payment networks and a heavily extended codebase, delivered by a small team.',
       items: [
         ['Four ways to deliver', 'Express, Home, Click & Collect and Curbside each needed their own payment rules and customer updates.', 'One multi-mode delivery engine with mode-specific payment restrictions and SMS milestones.', 'Customers only see payment options that work for their delivery mode, and hear from the store at each milestone.'],
@@ -241,7 +241,7 @@ export const caseStudies = {
       { icon: 'box', title: 'Reusable SFTP module', text: 'With an admin “Test Connection” button, reused across integrations.' },
     ],
     architecture: {
-      title: 'Storefronts in front, the ERP behind a scheduled bridge.',
+      title: 'Storefronts in front, the ERP behind a scheduled bridge',
       intro: 'Customers browse several websites with Arabic-friendly URLs. Behind Magento, ErpBridge keeps catalog, stock and customer data in step with the ERP on a schedule.',
       channels: ['Websites', 'Product API clients'],
       inbound: 'Custom routing',
@@ -269,8 +269,8 @@ export const caseStudies = {
       ['Customers & SEO', 'Offline orders shown in customer order history, whole-number currency formatting per website, canonical tags including CMS pages, and social sharing.'],
     ],
     flow: {
-      label: 'HOW ERP DATA MOVES',
-      title: 'Scheduled, two-way, visible.',
+      label: 'How ERP data moves',
+      title: 'Scheduled, two-way, visible',
       intro: 'ErpBridge runs on cron and reports every run in the admin.',
       steps: [
         ['Schedule', 'Cron jobs trigger each ErpBridge sync run.'],
@@ -279,7 +279,7 @@ export const caseStudies = {
       ],
     },
     challenges: {
-      title: 'Problems solved at the root.',
+      title: 'Problems solved at the root',
       intro: 'Language, stock and data problems fixed where they started.',
       items: [
         ['Arabic URLs', 'Magento’s URL sanitiser strips spaces and special characters, breaking Arabic product URLs.', 'A custom front-controller router that resolves Arabic URLs directly.', 'Readable, working Arabic product URLs.'],
@@ -330,7 +330,7 @@ export const caseStudies = {
       { icon: 'code', title: 'Five extensions tailored', text: 'Purchased extensions extended to match site behaviour.' },
     ],
     architecture: {
-      title: 'A rebuilt platform with the business logic carried over.',
+      title: 'A rebuilt platform with the business logic carried over',
       intro: 'The storefront and support tools were rebuilt on Adobe Commerce, with purchased extensions extended rather than replaced.',
       channels: ['Storefront', 'Support staff'],
       core: ['Adobe Commerce', 'On-Premise · custom modules'],
@@ -358,8 +358,8 @@ export const caseStudies = {
       ['Delivery', 'Git workflow, code reviews and deployments through migration and post-launch stabilisation.'],
     ],
     flow: {
-      label: 'HOW THE MIGRATION RAN',
-      title: 'Plan, move, rebuild, stabilise.',
+      label: 'How the migration ran',
+      title: 'Plan, move, rebuild, stabilise',
       intro: 'From an ageing Magento 1 store to a stable Adobe Commerce platform.',
       steps: [
         ['Plan', 'Designed the migration architecture from Magento 1 to Adobe Commerce On-Premise.'],
@@ -369,7 +369,7 @@ export const caseStudies = {
       ],
     },
     challenges: {
-      title: 'Moving without losing anything.',
+      title: 'Moving without losing anything',
       intro: 'An old platform, a crowded extension stack and features the business relied on.',
       items: [
         ['A legacy platform', 'An ageing Magento 1 store with business logic spread across third-party extensions.', 'Migration architecture, full data migration, and themes and extensions redeveloped on Adobe Commerce.', 'Existing business logic carried over to the new platform.'],
@@ -408,7 +408,7 @@ export const caseStudies = {
       { icon: 'shield', title: 'Warranty products', text: 'Linked to the products they cover and added alongside them.' },
     ],
     architecture: {
-      title: 'A backend that only speaks GraphQL.',
+      title: 'A backend that only speaks GraphQL',
       intro: 'The PWA is the storefront; Magento serves it entirely through an extended GraphQL schema.',
       columns: ['Clients', 'Backend', 'Schema domains'],
       channels: ['PWA storefront'],
@@ -436,8 +436,8 @@ export const caseStudies = {
       ['Accounts & config', 'A social-login mutation, plus header/footer blocks, an announcement bar, a minimum order amount and a newsletter-unsubscribe mutation.'],
     ],
     flow: {
-      label: 'HOW THE HOMEPAGE IS BUILT',
-      title: 'Arranged in admin, served in one query.',
+      label: 'How the homepage is built',
+      title: 'Arranged in admin, served in one query',
       intro: 'The homepage is composed in the admin and delivered to the PWA through a single resolver.',
       steps: [
         ['Arrange', 'Banner, product, category and CMS-block sliders are placed in the drag-and-drop builder.'],
@@ -446,7 +446,7 @@ export const caseStudies = {
       ],
     },
     challenges: {
-      title: 'Headless means everything goes through the API.',
+      title: 'Headless means everything goes through the API',
       intro: 'With no theme to fall back on, every feature and every bug lives in GraphQL.',
       items: [
         ['A silent cart bug', 'Customisable product options were dropped on add-to-cart — but only through GraphQL.', 'Traced it to the cart-mutation resolver rather than the cart logic, and fixed it with a narrowly scoped override.', 'Options reach the cart from the PWA, with the underlying cart logic untouched.'],
@@ -497,7 +497,7 @@ export const caseStudies = {
       { icon: 'code', title: 'Custom admin theme', text: 'The only project where the admin panel itself was re-skinned.' },
     ],
     architecture: {
-      title: 'A catalog built around how machinery is sold.',
+      title: 'A catalog built around how machinery is sold',
       intro: 'Buyers, sellers and auction partners feed the platform; every lead and request lands in an admin grid and an e-mail.',
       channels: ['Buyers & sellers', 'Auction partners'],
       inbound: 'Forms & Web APIs',
@@ -526,8 +526,8 @@ export const caseStudies = {
       ['Specifications', 'Ajax-driven product specification logic.'],
     ],
     flow: {
-      label: 'HOW A LEAD IS CAPTURED',
-      title: 'Form to inbox, every time.',
+      label: 'How a lead is captured',
+      title: 'Form to inbox, every time',
       intro: 'Each lead type runs through the same four-step pipeline.',
       steps: [
         ['Submit', 'A buyer or seller fills in a buy, sell or wanted form.'],
@@ -537,7 +537,7 @@ export const caseStudies = {
       ],
     },
     challenges: {
-      title: 'Data that doesn’t fit standard products.',
+      title: 'Data that doesn’t fit standard products',
       intro: 'Machinery is sold, valued and serviced differently from retail goods.',
       items: [
         ['Rich machinery data', 'Machinery needs job costing, accessories, specs, capacity ratings and repair history.', 'Nine custom data entities attached to the product form, on a master/child model.'],
@@ -575,7 +575,7 @@ export const caseStudies = {
       { icon: 'zap', title: 'Buy Now', text: 'A checkout bypass with bundle-product support.' },
     ],
     architecture: {
-      title: 'Two storefronts, two sync paths.',
+      title: 'Two storefronts, two sync paths',
       intro: 'Both storefronts share one platform. ERP traffic is split: catalog and stock on a schedule, order exports on a queue.',
       channels: ['BeautyGo storefront', 'FashionGo storefront'],
       core: ['Adobe Commerce', 'Magento 2'],
@@ -600,8 +600,8 @@ export const caseStudies = {
       ['Performance & checkout', 'Sitewide image lazy loading, placeholder text on checkout fields, a customised order summary and a fixed multi-wishlist edit popup.'],
     ],
     flow: {
-      label: 'HOW AN ORDER REACHES THE ERP',
-      title: 'Queued, not blocked.',
+      label: 'How an order reaches the ERP',
+      title: 'Queued, not blocked',
       intro: 'Order exports run on their own asynchronous queue.',
       steps: [
         ['Place', 'The customer places an order on either storefront.'],
@@ -610,7 +610,7 @@ export const caseStudies = {
       ],
     },
     challenges: {
-      title: 'Different jobs, different tools.',
+      title: 'Different jobs, different tools',
       intro: 'Sync timing, merchandising and privacy each got their own solution.',
       items: [
         ['One sync, two needs', 'Catalog and stock updates and order exports have different timing needs.', 'Split ERP sync into a scheduled cron module and an async RabbitMQ order-export queue, rather than one monolith.'],
@@ -662,7 +662,7 @@ export const caseStudies = {
       { icon: 'layers', title: '8-store theme framework', text: '471 templates and 427 LESS/SCSS files in one shared base theme.' },
     ],
     architecture: {
-      title: 'One instance, many vendors, scoped admin.',
+      title: 'One instance, many vendors, scoped admin',
       intro: 'Vendor storefronts are mapped to their own domains. In the admin, AdvPermission decides what each user can see.',
       columns: ['Storefronts', 'Platform', 'Scoped admin data'],
       channels: config.anonymizeClients ? ['Vendor site A', 'Vendor site B', 'Vendor site C', 'Vendor site D'] : ['aqua_tech', 'beyondreef', 'routemarine', 'zooxae'],
@@ -691,8 +691,8 @@ export const caseStudies = {
       ['Theming', 'A shared base theme powering 8 related storefronts.'],
     ],
     flow: {
-      label: 'HOW AN UNPAID ORDER IS CHASED',
-      title: 'Reminded, then escalated.',
+      label: 'How an unpaid order is chased',
+      title: 'Reminded, then escalated',
       intro: 'Cash-on-delivery and bank-transfer orders are followed up automatically.',
       steps: [
         ['Order', 'A customer places a COD or bank-transfer order.'],
@@ -701,7 +701,7 @@ export const caseStudies = {
       ],
     },
     challenges: {
-      title: 'Sharing one platform safely.',
+      title: 'Sharing one platform safely',
       intro: 'Many vendors, one database, one theme family.',
       items: [
         ['Data isolation', 'Vendor sites on one instance must not see each other’s orders, customers or reports.', 'AdvPermission, a from-scratch admin ACL scoping data by website/store and a split attribute, rewriting about 40 admin grid collections and blocks.'],
@@ -765,7 +765,7 @@ export const caseStudies = {
       { icon: 'search', title: 'Bilingual SEO', text: 'Open Graph, Twitter Card and JSON-LD, with RU/EN variants.' },
     ],
     architecture: {
-      title: 'Lean by design.',
+      title: 'Lean by design',
       intro: 'Two store languages on one lean Magento build, with only the integrations the Russian market needs.',
       channels: ['Russian store', 'English store'],
       core: ['Magento', 'Open Source'],
@@ -789,7 +789,7 @@ export const caseStudies = {
       ['Merchandising', 'An AJAX featured-products widget with six sort modes — newest, name, random, most-viewed, best-selling and top-rated — on top of the Themevast product-tab extension.'],
     ],
     challenges: {
-      title: 'Local, bilingual and fast.',
+      title: 'Local, bilingual and fast',
       intro: 'A store built natively on Magento for a market with its own conventions.',
       items: [
         ['Speed', 'The store had to stay fast as features were added.', 'Performance as the primary architectural constraint, with unused modules removed.'],
@@ -832,7 +832,7 @@ export const caseStudies = {
       ['Invoices', 'PDF invoice fields relabelled for local requirements, e.g. “SKU” to “Packing Size” and “Tax” to “TaxTotal”.'],
     ],
     challenges: {
-      title: 'Small changes, everyday impact.',
+      title: 'Small changes, everyday impact',
       items: [
         ['Configurable prices', 'Configurable products should show the price of their cheapest option.', 'Lowest-child configurable-product pricing logic.'],
         ['Invoice language', 'Invoice labels didn’t match how the business describes its products.', 'Relabelled PDF invoice fields, such as “SKU” to “Packing Size”.'],
@@ -871,8 +871,8 @@ export const caseStudies = {
       ['Admin tools', 'Category import/export tooling and a configurable sitewide sticky notification bar.'],
     ],
     flow: {
-      label: 'HOW A QUOTE IS REQUESTED',
-      title: 'No prices, no checkout — a quote.',
+      label: 'How a quote is requested',
+      title: 'No prices, no checkout — a quote',
       steps: [
         ['Browse', 'Prices stay hidden for products flagged “Is Quoteable”.'],
         ['Request', 'The quote flow replaces cart, mini-cart and checkout.'],
@@ -880,7 +880,7 @@ export const caseStudies = {
       ],
     },
     challenges: {
-      title: 'Two ways to buy on one site.',
+      title: 'Two ways to buy on one site',
       items: [
         ['Quote-only products', 'Quote-eligible products needed a buying path with no public prices and no standard checkout.', 'A parallel quote flow for flagged products, built on Magecomp Emailquotepro.'],
       ],
@@ -917,8 +917,8 @@ export const caseStudies = {
       ['Theme', 'A custom theme extending core Luma/Blank.'],
     ],
     flow: {
-      label: 'HOW A PRODUCT IS BUILT',
-      title: 'Configure, price, add.',
+      label: 'How a product is built',
+      title: 'Configure, price, add',
       steps: [
         ['Configure', 'The customer builds a custom-cut, layered print product.'],
         ['Price', 'The build-and-price flow calculates the configured product.'],
@@ -926,7 +926,7 @@ export const caseStudies = {
       ],
     },
     challenges: {
-      title: 'Products that don’t exist until ordered.',
+      title: 'Products that don’t exist until ordered',
       items: [
         ['Made-to-measure pricing', 'Layered, custom-cut print products can’t be priced as fixed SKUs.', 'A configurable build-and-price flow with its own AJAX add-to-cart endpoint.'],
         ['Quote-only items', 'Some items can only be quoted, not priced.', 'A Request-a-Quote mini-cart with zero-price handling and per-item size and quantity rules.'],
@@ -954,7 +954,7 @@ export const caseStudies = {
       ['Clients', 'React web app; iOS and Android in progress'],
       ['My role', 'Product, architecture, API design, review & testing'],
     ],
-    highlightsTitle: 'Five things that set Artha360 apart.',
+    highlightsTitle: 'Five things that set Artha360 apart',
     highlights: [
       { icon: 'globe', title: 'Built for India', text: 'PPF, EPF, NPS, SSY, SGB, FD/RD maths and Indian tax reports, alongside funds and stocks.' },
       { icon: 'users', title: 'Whole family, one login', text: 'Track every family member separately and filter any screen by person.' },
@@ -963,7 +963,7 @@ export const caseStudies = {
       { icon: 'layers', title: 'One API, five apps', text: 'A locked OpenAPI contract serves web, admin, iOS and Android.' },
     ],
     architecture: {
-      title: 'One locked API contract behind every app.',
+      title: 'One locked API contract behind every app',
       intro: 'Every client builds against the same OpenAPI schema. Customers and admins sign in on separate tracks, so an admin token never works on customer routes or the other way round.',
       columns: ['Clients', 'Backend', 'Data & services'],
       channels: ['Web app', 'iOS app', 'Android app', 'Admin console'],
@@ -978,7 +978,7 @@ export const caseStudies = {
       notes: ['Separate customer & admin auth', '184 routes · 165 tests', 'Audit trail on every admin change'],
       callout: 'The same backend runs a consumer finance app and the operator console that manages its customers, plans and support.',
     },
-    capabilitiesTitle: 'A household’s whole financial picture.',
+    capabilitiesTitle: 'A household’s whole financial picture',
     capabilities: [
       ['Dashboard', 'Eight KPIs, net-worth trend, asset allocation, top movers, upcoming payments and recent transactions.'],
       ['Investments', 'A 22-type instrument catalog with FD/RD maturity maths, plus mutual funds (XIRR, 1Y return) and stocks (P&L).'],
@@ -1006,7 +1006,7 @@ export const caseStudies = {
       ['Quality', ['pytest', 'OpenAPI contract']],
     ],
     skills: ['Product design', 'API design', 'Fintech domain', 'Security', 'AI-assisted development'],
-    galleryTitle: 'Screens from the demo build.',
+    galleryTitle: 'Screens from the demo build',
     gallery: [],
   },
 
@@ -1019,7 +1019,7 @@ export const caseStudies = {
       ['AI', 'Optional: everything works without an API key'],
       ['My role', 'Product, architecture, scoring design, review & testing'],
     ],
-    highlightsTitle: 'Five things that set Career Intelligence apart.',
+    highlightsTitle: 'Five things that set Career Intelligence apart',
     highlights: [
       { icon: 'search', title: 'Finds jobs itself', text: 'Scans the Greenhouse, Lever, Ashby and Workday boards of companies you track, on a schedule.' },
       { icon: 'zap', title: 'Explainable score', text: 'Nine weighted components, each with plain-language reasons. Same inputs, same score.' },
@@ -1028,7 +1028,7 @@ export const caseStudies = {
       { icon: 'shield', title: 'You stay in control', text: 'The assistant proposes changes as cards; nothing changes until you confirm.' },
     ],
     architecture: {
-      title: 'Every source, one pipeline, one score.',
+      title: 'Every source, one pipeline, one score',
       intro: 'Jobs arrive from scans, imports, the extension and manual entry. Each is normalised, de-duplicated, parsed and scored by the same engine.',
       columns: ['Inputs', 'Backend', 'Data & services'],
       channels: ['Web app', 'Chrome extension', 'Assistant chat'],
@@ -1045,7 +1045,7 @@ export const caseStudies = {
       notes: ['Works without AI', 'Deterministic, explained score', 'Data stays on your machine'],
       callout: 'The score is deterministic: the same job, profile and scoring version always give the same number, and every point is explained.',
     },
-    capabilitiesTitle: 'The whole job search, CV to offer.',
+    capabilitiesTitle: 'The whole job search, CV to offer',
     capabilities: [
       ['CVs & profile', 'Parse PDF, DOCX, TXT or Markdown CVs, keep versions with diffs, and build professional and target profiles.'],
       ['Company intelligence', 'Tiers, aliases and field-level provenance, with verification derived from evidence.'],
@@ -1057,7 +1057,7 @@ export const caseStudies = {
       ['Reliability', 'Daily backups with restore, optional login, audit log, CI and a Playwright smoke test.'],
     ],
     challenges: {
-      title: 'The hard parts of a job search, automated.',
+      title: 'The hard parts of a job search, automated',
       items: [
         ['Duplicate jobs everywhere', 'The same role appears on LinkedIn, Naukri, the company board and as reposts in other cities.', 'Match on link, posting ID, company + title in any city, or a 60%+ similar JD; concurrent scans cannot save twice.', 'One job per role, showing every source it came from.'],
         ['Scores that lie', 'A “Lead” title at a good company can look like a strong match even on the wrong stack.', 'Cap the score at 60 when none of the job’s main technologies is in your profile; soft skills count half.', 'Off-stack jobs stop crowding the top of the list.'],
@@ -1071,7 +1071,7 @@ export const caseStudies = {
       ['AI (optional)', ['LLM tool use', 'Read-only data tools']],
     ],
     skills: ['Product design', 'Scoring systems', 'Data quality', 'Automation', 'AI-assisted development'],
-    galleryTitle: 'Screens from the demo build.',
+    galleryTitle: 'Screens from the demo build',
     gallery: [],
   },
 
@@ -1084,7 +1084,7 @@ export const caseStudies = {
       ['Users', 'Owner, manager, receptionist, trainer'],
       ['My role', 'Product, architecture, data design, review & testing'],
     ],
-    highlightsTitle: 'Five things that set this platform apart.',
+    highlightsTitle: 'Five things that set this platform apart',
     highlights: [
       { icon: 'zap', title: 'One trip per screen', text: 'Dashboards run on MongoDB aggregation pipelines, so each screen is a single query.' },
       { icon: 'shield', title: 'Signed QR check-in', text: 'HMAC-signed member QR codes, scanned by camera, with no token storage.' },
@@ -1093,7 +1093,7 @@ export const caseStudies = {
       { icon: 'layers', title: 'Real profit & loss', text: 'Revenue from payments minus expenses by category, month by month.' },
     ],
     architecture: {
-      title: 'Clean layers, background jobs on the side.',
+      title: 'Clean layers, background jobs on the side',
       intro: 'Routes call services, services call repositories behind interfaces, and slow work like sending reminders runs in Celery workers.',
       columns: ['Users', 'Backend', 'Data & services'],
       channels: ['Admin web app', 'QR check-in', 'Trainer self-service'],
@@ -1110,7 +1110,7 @@ export const caseStudies = {
       notes: ['Role-based access, 4 roles', 'Routes → services → repositories', 'Scheduled reminders & dispatch'],
       callout: 'Every module follows the same conventions: soft delete, audit log, search, filters and export.',
     },
-    capabilitiesTitle: 'The whole gym business in one system.',
+    capabilitiesTitle: 'The whole gym business in one system',
     capabilities: [
       ['Members', 'Profiles with health data and BMI, uploads, timeline, soft delete and a field-level audit log.'],
       ['Memberships', 'Plans, renewals, coupons, GST pricing locked at purchase, invoices and payment links.'],
@@ -1138,7 +1138,7 @@ export const caseStudies = {
       ['Quality & ops', ['pytest', 'Vitest', 'Docker', 'nginx']],
     ],
     skills: ['Product design', 'Domain modelling', 'Reporting', 'Background jobs', 'AI-assisted development'],
-    galleryTitle: 'Screens from the demo build.',
+    galleryTitle: 'Screens from the demo build',
     gallery: [],
   },
 
@@ -1151,7 +1151,7 @@ export const caseStudies = {
       ['Tools', '7 working, more planned'],
       ['My role', 'Product, Magento expertise, review & testing'],
     ],
-    highlightsTitle: 'Five tools I use on real projects.',
+    highlightsTitle: 'Five tools I use on real projects',
     highlights: [
       { icon: 'box', title: 'Module generator', text: 'registration.php, module.xml and composer.json, with optional observer, cron, grid, command and block.' },
       { icon: 'sync', title: 'Config diff', text: 'Paste two core_config_data exports and see exactly what was added, removed or changed.' },
@@ -1159,7 +1159,7 @@ export const caseStudies = {
       { icon: 'search', title: 'Searchable references', text: 'CLI commands, core events and core cron jobs in one search box.' },
       { icon: 'code', title: 'README generator', text: 'Consistent documentation for every custom module.' },
     ],
-    capabilitiesTitle: 'What the toolkit does.',
+    capabilitiesTitle: 'What the toolkit does',
     capabilities: [
       ['Module Generator', 'Scaffolds a working module with the optional pieces you tick.'],
       ['README Generator', 'Writes a README for a custom module.'],
@@ -1173,7 +1173,7 @@ export const caseStudies = {
       ['Frontend', ['React', 'TypeScript', 'Vite']],
     ],
     skills: ['Magento 2 internals', 'Developer tooling', 'Code generation', 'AI-assisted development'],
-    galleryTitle: 'Screens from the demo build.',
+    galleryTitle: 'Screens from the demo build',
     gallery: [],
   },
 };
