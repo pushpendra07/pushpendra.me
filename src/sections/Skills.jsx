@@ -3,10 +3,10 @@ import BrandIcon from '../components/BrandIcon';
 import { skills, skillStory } from '../data/profile';
 import { track } from '../lib/analytics';
 import { scrollToHash } from '../lib/scroll';
+import useReducedMotion, { prefersReducedMotion } from '../hooks/useReducedMotion';
 
-// Skills as a scroll story. On wide screens the stage sticks while the page scrolls past it:
-// the left side swaps the numbered step, the right side swaps the animated scene. On phones
-// every step is stacked and shown in full, so nothing depends on scroll position.
+// The stage swaps the numbered step and its scene as the page scrolls past it.
+const STACKED = '(max-width: 900px) and (height < 568px), (max-width: 900px) and (prefers-reduced-motion: reduce)';
 
 const learning = skills.find((s) => s.learning);
 const pad = (n) => String(n).padStart(2, '0');
@@ -152,20 +152,25 @@ function Scene({ id, chips }) {
 
 export default function Skills() {
   const trackRef = useRef(null);
+  const stageRef = useRef(null);
   const [active, setActive] = useState(0);
   const [stacked, setStacked] = useState(false);
+  const [revealed, setRevealed] = useState([]);
+  const reducedMotion = useReducedMotion();
   const n = skillStory.length;
 
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 900px)');
+    const mq = window.matchMedia(STACKED);
     let raf = 0;
     const measure = () => {
       raf = 0;
       const el = trackRef.current;
       if (!el || mq.matches) return;
       const r = el.getBoundingClientRect();
-      const span = r.height - window.innerHeight;
-      const p = span > 0 ? Math.min(Math.max(-r.top / span, 0), 0.9999) : 0;
+      const stage = stageRef.current;
+      const inset = parseFloat(getComputedStyle(stage).top);
+      const span = r.height - stage.offsetHeight;
+      const p = span > 0 ? Math.min(Math.max((inset - r.top) / span, 0), 0.9999) : 0;
       setActive(Math.floor(p * n));
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(measure); };
@@ -182,6 +187,20 @@ export default function Skills() {
     };
   }, [n]);
 
+  // On short screens the scenes play in place when they enter the viewport.
+  useEffect(() => {
+    if (!stacked || reducedMotion) return;
+    const scenes = [...stageRef.current.querySelectorAll('.sk-art')];
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting);
+      if (!visible.length) return;
+      visible.forEach(({ target }) => observer.unobserve(target));
+      setRevealed((steps) => [...steps, ...visible.map(({ target }) => scenes.indexOf(target))]);
+    }, { threshold: 0.15 });
+    scenes.forEach((scene) => observer.observe(scene));
+    return () => observer.disconnect();
+  }, [stacked, reducedMotion]);
+
   // GA4: how far into the story people get (each step once per page view).
   const seenSteps = useRef(new Set());
   useEffect(() => {
@@ -195,9 +214,11 @@ export default function Skills() {
     track('skill_step_click', { step: i + 1, step_name: skillStory[i].key });
     const el = trackRef.current;
     if (!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY;
-    const span = el.offsetHeight - window.innerHeight;
-    window.scrollTo({ top: top + (span * (i + 0.5)) / n, behavior: 'smooth' });
+    const stage = stageRef.current;
+    const inset = parseFloat(getComputedStyle(stage).top);
+    const top = el.getBoundingClientRect().top + window.scrollY - inset;
+    const span = el.offsetHeight - stage.offsetHeight;
+    window.scrollTo({ top: top + (span * (i + 0.5)) / n, behavior: prefersReducedMotion() ? 'instant' : 'smooth' });
   };
 
   return (
@@ -208,9 +229,9 @@ export default function Skills() {
       </div>
 
       <div className="sk-track" ref={trackRef} style={{ '--n': n }}>
-        <div className="sk-stage wrap">
+        <div ref={stageRef} className="sk-stage wrap">
           {skillStory.map((s, i) => (
-            <article key={s.key} className="sk-step" style={tone(i)} data-on={stacked || i === active ? '' : undefined} aria-hidden={!stacked && i !== active ? true : undefined}>
+            <article key={s.key} className="sk-step" style={tone(i)} data-on={(stacked ? reducedMotion || revealed.includes(i) : i === active) ? '' : undefined} aria-hidden={!stacked && i !== active ? true : undefined}>
               <div className="sk-narr">
                 <span className="sk-kicker"><span className="sk-num">{pad(i + 1)}</span><span className="sk-label">{s.label}</span></span>
                 <h3 className="sk-title">{s.title} <span className="accent">{s.accent}</span></h3>

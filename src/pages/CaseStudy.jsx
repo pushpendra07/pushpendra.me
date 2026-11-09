@@ -107,6 +107,7 @@ function SectionMenu({ items }) {
   return (
     <nav className="cs-toc" id="case-study" aria-label="Case study sections">
       <span ref={barRef} className="cs-progress" aria-hidden="true" />
+      <p className="cs-scroll-hint cs-toc-hint">Scroll sideways for more sections <span aria-hidden="true">↔</span></p>
       <ol ref={listRef} className="cs-container cs-toc-list">
         {items.map(([key, label]) => {
           const on = active === `cs-${key}`;
@@ -191,7 +192,10 @@ function DeepSections({ study, details, pj }) {
           <div className="cs-container cs-stack-sm">
             <SectionHead n='Architecture overview' title={arch.title} intro={arch.intro} />
             <div className={`cs-diagram-frame cs-arch--${look.arch}`} data-reveal="">
-              <div className="cs-diagram-scroll"><ArchitectureDiagram data={arch} id="arch" /></div>
+              <p className="cs-scroll-hint">Scroll sideways to explore the diagram <span aria-hidden="true">↔</span></p>
+              <div className="cs-diagram-scroll" role="region" aria-label="Architecture diagram" tabIndex={0}>
+                <ArchitectureDiagram data={arch} id="arch" />
+              </div>
             </div>
             {arch.callout && (
               <div className="cs-callout" data-reveal="">

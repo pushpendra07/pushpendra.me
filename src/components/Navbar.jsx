@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { config, nav } from '../data/profile';
 import { scrollToHash } from '../lib/scroll';
 import ThemeSelect from './ThemeSelect';
@@ -10,6 +11,8 @@ const NARROW = 1080;
 export default function Navbar({ active, base = '' }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const toggleRef = useRef(null);
+  const menuRef = useRef(null);
 
   useEffect(() => {
     const onResize = () => { if (window.innerWidth >= NARROW) setMenuOpen(false); };
@@ -23,11 +26,27 @@ export default function Navbar({ active, base = '' }) {
     };
   }, []);
 
-  const go = (e) => scrollToHash(e, () => setMenuOpen(false));
+  const go = (e) => scrollToHash(e, menuOpen ? () => flushSync(() => setMenuOpen(false)) : undefined);
+
+  const onMenuKeyDown = (e) => {
+    if (!menuOpen) return;
+    const toggle = toggleRef.current;
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      setMenuOpen(false);
+      toggle.focus();
+    }
+    if (e.key !== 'Tab') return;
+    const last = menuRef.current.querySelector('.mobile-cta');
+    if ((!e.shiftKey && e.target === last) || (e.shiftKey && e.target === toggle)) {
+      e.preventDefault();
+      (e.shiftKey ? last : toggle).focus();
+    }
+  };
   const headerClass = ['nav-header', (scrolled || menuOpen) && 'is-scrolled'].filter(Boolean).join(' ');
 
   return (
-    <header className={headerClass}>
+    <header className={headerClass} onKeyDown={onMenuKeyDown}>
       <a className="skip-link" href="#main">Skip to content</a>
       <nav className="nav" aria-label="Primary">
         <a href={`${base}#home`} onClick={go} className="brand">
@@ -61,8 +80,12 @@ export default function Navbar({ active, base = '' }) {
           <a href={`${base}#contact`} onClick={go} className="pill pill-primary nav-cta">Hire me</a>
           <button
             type="button"
+            ref={toggleRef}
             className="menu-toggle"
-            onClick={() => setMenuOpen((o) => !o)}
+            onClick={() => {
+              toggleRef.current.focus();
+              setMenuOpen((o) => !o);
+            }}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
@@ -72,7 +95,7 @@ export default function Navbar({ active, base = '' }) {
         </div>
       </nav>
 
-      <div id="mobile-menu" className={`mobile-menu${menuOpen ? ' is-open' : ''}`} hidden={!menuOpen}>
+      <div ref={menuRef} id="mobile-menu" className="mobile-menu" hidden={!menuOpen}>
         <ul>
           {nav.map(([id, label], i) => (
             <li key={id} style={{ '--i': i }}>
