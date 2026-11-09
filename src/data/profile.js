@@ -105,7 +105,7 @@ export const projects = [
       'Zinrelo loyalty built into the sales-rule engine as first-class cart rules, including receipt-scan point claims, refer-a-friend rewards and reward history.',
       'Multiple GraphQL modules (payments, gift cards, wishlist, inventory, store credit) for the headless storefront, plus a drag-and-drop homepage builder.',
       'ERP import pipeline processing 10,000–20,000 SKUs per batch, and a timing-out CSV export rewritten to output 50,000 products in 3–5 seconds.',
-      'Zone-based inventory and geofencing with admin-drawn Google Maps delivery polygons, tied to Express, Home, Click & Collect and Curbside modes with per-mode cutoffs.',
+      'Zone-based inventory and geofencing with admin-drawn Google Maps delivery polygons, tied to delivery slots and cutoff times per zone.',
       'Message-queue order workflow integrating Grubtech (kitchen display) and FarEye (last-mile logistics) with a shared webhook-plus-retry pattern.',
       'Rule-based customer segments, age-restricted product controls, Adjust attribution and MoEngage engagement campaigns.',
     ],
@@ -441,7 +441,7 @@ export const skills = [
   { group: 'Leadership & Delivery', items: ['Code reviews', 'Mentoring', 'Estimation', 'UAT', 'Production support', 'PSR standards'] },
   {
     group: 'Currently learning', learning: true,
-    note: 'Actively learning, not yet shipped to production.',
+    note: 'Python, React and MongoDB went from first lines to full working products of my own.',
     items: ['Python', 'MongoDB', 'React.js full-stack', 'AI-driven search & personalisation', 'AI in Adobe Commerce'],
   },
 ];
@@ -489,11 +489,18 @@ export const featuredFlow = [
   ['Sent to SAP', 'RabbitMQ · auto-retry'],
   ['Delivered', 'OTP-verified handoff'],
 ];
-export const featuredStats = [
-  { kicker: 'ERP import', value: '20,000', label: 'SKUs per import batch, at most' },
-  { kicker: 'Delivery', value: '4', label: 'modes: Express, Home, Click & Collect, Curbside' },
+// The featured project's summary and results (home page, Projects section).
+export const featuredSummary = 'One cart that the shopper app, in-store pickers, two discount engines and SAP all agree on, across many stores selling the same stock.';
+// What the featured platform connects, shown as tiles. `brand` is a mark in data/brands.js;
+// the rest get a short lettered tile.
+export const featuredConnects = [
+  { name: 'Customer app', role: 'Website and mobile apps, on GraphQL', brand: 'graphql' },
+  { name: 'Picker app', role: 'Aisle-by-aisle picking and dispatch', mono: 'PK' },
+  { name: 'SAP ERP', role: 'Every order event, through queues', brand: 'sap' },
+  { name: 'Talon.One + Zinrelo', role: 'Promotions and loyalty as cart rules', mono: '%' },
+  { name: 'Grubtech', role: 'Kitchen display for fresh orders', mono: 'GT' },
+  { name: 'FarEye / LogiNext', role: 'Last-mile delivery, OTP handoff', mono: 'FE' },
 ];
-export const featuredExport = { kicker: 'Catalog export', value: '3–5 s', label: 'to export 50,000 products', before: 'Timed out', after: '3–5 s' };
 
 export const howIWork = [
   {

@@ -16,7 +16,6 @@ function duration(dates, now) {
 }
 const pad = (n) => String(n).padStart(2, '0');
 const OPEN_TO = ['Full-time', 'Contract', 'Adobe Commerce consulting'];
-const istTime = () => new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' }).format(new Date());
 
 // Oldest first, so the timeline reads from the first job to today.
 const roles = [...experience].sort((a, b) => toMonths(a.dates.split(' to ')[0]) - toMonths(b.dates.split(' to ')[0]));
@@ -28,15 +27,6 @@ export default function Experience() {
   const now = d.getFullYear() * 12 + d.getMonth();
   const listRef = useRef(null);
   const [reached, setReached] = useState(0);
-  const [time, setTime] = useState('');
-
-  // Local time in Bikaner, set after hydration so the prerendered HTML stays stable.
-  useEffect(() => {
-    setTime(istTime());
-    const id = setInterval(() => setTime(istTime()), 30000);
-    return () => clearInterval(id);
-  }, []);
-
   // The rail fills up to a line 60% down the viewport; a row lights up once its dot is passed.
   useEffect(() => {
     let raf = 0;
@@ -113,7 +103,7 @@ export default function Experience() {
               <p className="tf-role"><strong>Senior Software Developer</strong> with tech-lead duties</p>
               <p className="tf-where">
                 <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" /><circle cx="12" cy="10" r="2.5" /></svg>
-                <span>{config.location} · remote<br /><span className="tf-clock"><i aria-hidden="true" />{time ? `${time} ` : ''}IST (UTC+5:30)</span></span>
+                <span>{config.location} · remote</span>
               </p>
               <span className="tf-label">Open to</span>
               <ul className="tf-open">

@@ -48,7 +48,7 @@ export const caseStudies = {
       ['Payments', 'Cards, Apple Pay, saved cards, wallet, gift cards and loyalty points on one order. Cash-on-delivery orders can switch to online payment later.'],
       ['Loyalty & promotions', 'Loyalty rewards work like normal cart discounts. Promotions run on Magento’s engine or Talon.One, per store. Cashback works with store credit.'],
       ['Mobile & headless', 'GraphQL APIs power the website and apps, including one cart shared across regional stores.'],
-      ['Delivery', 'Customers only see zones and time slots that serve their address: Express, Home, Click & Collect, Curbside.'],
+      ['Delivery', 'Customers only see the zones and time slots that serve their address.'],
       ['In-store picking', 'A staff app guides pickers through the store, handles missing items and sends orders out.'],
       ['ERP & operations', 'SAP receives every order event: sales, returns, refunds, stock and shipments. A separate live feed updates an ops dashboard.'],
       ['Inventory', 'Stock stays accurate when many stores sell the same product and staff pick it at the same time.'],
@@ -71,7 +71,7 @@ export const caseStudies = {
       intro: 'Delivery areas follow a three-level structure: Polygon › Zone › Source. The customer’s address decides which store fulfils the order, and the admin team manages all of it without code changes.',
       levels: [
         ['Polygon', 'A delivery area drawn on Google Maps in the admin panel.'],
-        ['Zone', 'A group of polygons with its delivery modes (Express, Home, Click & Collect, Curbside) and cutoff times.'],
+        ['Zone', 'A group of polygons with its delivery slots and cutoff times.'],
         ['Source', 'The store linked to the zone, which fulfils the order. If an address falls outside every polygon, checkout stops and the cart is cleared, so undeliverable orders are never placed.'],
       ],
     },

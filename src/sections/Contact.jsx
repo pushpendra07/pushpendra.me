@@ -1,27 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { config } from '../data/profile';
 import { externalProps, getLinks } from '../lib/links';
 import { scrollToHash } from '../lib/scroll';
 import { track } from '../lib/analytics';
 import { decodeEmail, openEmail } from '../lib/email';
-
-// Live local time; rendered only after mount so the pre-rendered HTML stays stable.
-function useLocalTime(timeZone) {
-  const [time, setTime] = useState('');
-  useEffect(() => {
-    const fmt = new Intl.DateTimeFormat('en-GB', { timeZone, hour: '2-digit', minute: '2-digit' });
-    const tick = () => setTime(fmt.format(new Date()));
-    tick();
-    const id = setInterval(tick, 30000);
-    return () => clearInterval(id);
-  }, [timeZone]);
-  return time;
-}
+import SitAvatar from '../components/SitAvatar';
+import { prefersReducedMotion } from '../hooks/useReducedMotion';
 
 export default function Contact() {
   const { linkedin, github, resume, missingNote } = getLinks();
   const [copied, setCopied] = useState(false);
-  const time = useLocalTime(config.timeZone);
+  const cardRef = useRef(null);
+
+  // A soft light that follows the pointer across the card (--mx / --my in px).
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card || prefersReducedMotion() || !window.matchMedia('(pointer: fine)').matches) return undefined;
+    const onMove = (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+      card.style.setProperty('--my', `${e.clientY - r.top}px`);
+    };
+    card.addEventListener('pointermove', onMove, { passive: true });
+    return () => card.removeEventListener('pointermove', onMove);
+  }, []);
 
   const copyEmail = async () => {
     try {
@@ -37,15 +39,18 @@ export default function Contact() {
   return (
     <section id="contact" className="section contact">
       <div className="wrap">
-        <div className="cta-card" data-reveal="">
+        <div className="cta-wrap" data-reveal="">
+        <SitAvatar />
+        <div className="cta-card" ref={cardRef}>
+          <div className="cta-fx" aria-hidden="true"><i /><i /><i /></div>
           <span className="tag tag-dark">Available immediately</span>
-          <h2 className="h2">Hiring for Adobe Commerce? <span className="soft">Let&apos;s talk.</span></h2>
+          <h2 className="h2">Hiring for Adobe Commerce? <span className="soft cta-shimmer">Let&apos;s talk.</span></h2>
           <p>
             Senior Magento and Adobe Commerce roles, contract work, or a custom module, integration or performance
             problem. Email is the fastest way to reach me.
           </p>
           <ul className="available" aria-label="Available for">
-            {config.availableFor.map((a) => <li key={a}>{a}</li>)}
+            {config.availableFor.map((a, i) => <li key={a} style={{ '--i': i }}>{a}</li>)}
           </ul>
           <div className="ctas">
             <span className="email-group">
@@ -62,9 +67,10 @@ export default function Contact() {
           <p className="sr-only" aria-live="polite">{copied ? 'Email address copied' : ''}</p>
           <p className="contact-meta">
             {github.external && <a href={github.href} {...externalProps(true)}>GitHub</a>}
-            <span>{config.location}{time && <> · <time>{time}</time> IST</>}</span>
+            <span>{config.location}</span>
           </p>
           {missingNote && <p className="contact-meta">{missingNote}</p>}
+        </div>
         </div>
       </div>
     </section>

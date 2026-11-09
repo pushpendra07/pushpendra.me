@@ -3,19 +3,6 @@ import { config, nav } from '../data/profile';
 import { scrollToHash } from '../lib/scroll';
 import ThemeSelect from './ThemeSelect';
 
-// Local time in Bikaner, filled in after mount so the pre-rendered HTML stays stable.
-function useClock(timeZone) {
-  const [time, setTime] = useState('');
-  useEffect(() => {
-    const fmt = new Intl.DateTimeFormat('en-GB', { timeZone, hour: '2-digit', minute: '2-digit' });
-    const tick = () => setTime(fmt.format(new Date()));
-    tick();
-    const id = setInterval(tick, 20000);
-    return () => clearInterval(id);
-  }, [timeZone]);
-  return time;
-}
-
 // Below this width the CSS swaps the link list for the menu button.
 const NARROW = 1080;
 
@@ -23,7 +10,6 @@ const NARROW = 1080;
 export default function Navbar({ active, base = '' }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const time = useClock(config.timeZone);
 
   useEffect(() => {
     const onResize = () => { if (window.innerWidth >= NARROW) setMenuOpen(false); };
@@ -69,7 +55,7 @@ export default function Navbar({ active, base = '' }) {
           <span className="nav-status">
             <span className="live-dot" aria-hidden="true" />
             <b>Available now</b>
-            <span className="nav-status-more"> · {config.location.split(',')[0]}{time ? ` ${time}` : ''} IST</span>
+            <span className="nav-status-more"> · {config.location.split(',')[0]}</span>
           </span>
           <ThemeSelect />
           <a href={`${base}#contact`} onClick={go} className="pill pill-primary nav-cta">Hire me</a>
