@@ -8,6 +8,14 @@
     <meta name="color-scheme" content="dark light" />
     <!-- Theme before first paint: light unless the visitor picked dark (src/lib/theme.js). -->
     <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}t=t==='dark'?'dark':'light';document.documentElement.dataset.theme=t;document.querySelector('meta[name=theme-color]').content=t==='light'?'#ffffff':'#0a0b14'})()</script>
+    <script>
+      window.clarity = window.clarity || function(){(window.clarity.q = window.clarity.q || []).push(arguments)};
+      (function(){var done=false;function loadScript(src){var s=document.createElement('script');s.async=true;s.src=src;document.head.appendChild(s);}
+      function load(){if(done)return;done=true;loadScript('https://www.clarity.ms/tag/zay4a9g664');}
+      function idle(){(window.requestIdleCallback||function(f){setTimeout(f,1)})(load,{timeout:4000});}
+      if(document.readyState==='complete')setTimeout(idle,2500);else addEventListener('load',function(){setTimeout(idle,2500);});
+      ['pointerdown','keydown','scroll'].forEach(function(e){addEventListener(e,load,{once:true,passive:true});});})();
+    </script>
     <title>Page not found · Pushpendra Singh Sodha</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />

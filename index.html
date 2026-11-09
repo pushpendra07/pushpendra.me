@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Google tag, loaded once the page is idle so it never competes with first paint. -->
+    <!-- Analytics tags load on first interaction or when the page is idle after load. -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -13,7 +13,9 @@
       gtag('consent', 'default', { analytics_storage: 'denied', region: ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH'] });
       gtag('js', new Date());
       gtag('config', 'G-PBV4P35V2D');
-      (function(){var done=false;function load(){if(done)return;done=true;var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=G-PBV4P35V2D';document.head.appendChild(s);}
+      window.clarity = window.clarity || function(){(window.clarity.q = window.clarity.q || []).push(arguments)};
+      (function(){var done=false;function loadScript(src){var s=document.createElement('script');s.async=true;s.src=src;document.head.appendChild(s);}
+      function load(){if(done)return;done=true;loadScript('https://www.googletagmanager.com/gtag/js?id=G-PBV4P35V2D');loadScript('https://www.clarity.ms/tag/zay4a9g664');}
       function idle(){(window.requestIdleCallback||function(f){setTimeout(f,1)})(load,{timeout:4000});}
       if(document.readyState==='complete')setTimeout(idle,2500);else addEventListener('load',function(){setTimeout(idle,2500);});
       ['pointerdown','keydown','scroll'].forEach(function(e){addEventListener(e,load,{once:true,passive:true});});})();
