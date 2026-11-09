@@ -1,4 +1,4 @@
-const FLAGS = { UAE: '🇦🇪', Kuwait: '🇰🇼', Lebanon: '🇱🇧', Australia: '🇦🇺', 'Saudi Arabia': '🇸🇦', USA: '🇺🇸', Russia: '🇷🇺' };
+export const FLAGS = { UAE: '🇦🇪', Kuwait: '🇰🇼', Lebanon: '🇱🇧', Australia: '🇦🇺', 'Saudi Arabia': '🇸🇦', USA: '🇺🇸', Russia: '🇷🇺' };
 
 // "🇦🇪 Dubai, UAE" style location line. Unknown or missing places get a globe.
 export default function Place({ place, fallback = 'Remote client' }) {

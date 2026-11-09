@@ -3,12 +3,14 @@ import {
   ArchitectureDiagram, BranchDiagram, PipelineDiagram, ZoneDiagram,
 } from '../components/CaseDiagrams';
 import { caseStudies } from '../data/caseStudies';
+import { lookFor, mapCopy } from '../data/caseLooks';
 import useActiveSection from '../hooks/useActiveSection';
 import { prefersReducedMotion } from '../hooks/useReducedMotion';
 import { externalProps, getLinks } from '../lib/links';
 import { openEmail } from '../lib/email';
 import BrandIcon from '../components/BrandIcon';
 import Place from '../components/Place';
+import Points from '../components/Points';
 import IntegrationMap from '../components/IntegrationMap';
 import ProjectScene, { hasScene } from '../components/ProjectScene';
 import { brands } from '../data/brands';
@@ -136,6 +138,8 @@ function DeepSections({ study, details, pj }) {
   const product = pj.kind === 'product';
   const arch = study.architecture;
   const diagrams = study.diagrams ?? [];
+  const look = lookFor(pj.slug);
+  const copy = mapCopy(look.map, { name: product ? pj.title : clientName(pj), platform: pj.platform, product, nodes });
   const menu = useMemo(() => [
     nodes.length >= 3 && ['map', 'Integrations'],
     study.highlights && ['highlights', 'Highlights'],
@@ -156,11 +160,9 @@ function DeepSections({ study, details, pj }) {
       {nodes.length >= 3 && (
         <section id="cs-map" className="cs-section cs-section--tint">
           <div className="cs-container cs-stack-sm">
-            <SectionHead n={product ? 'How it fits together' : 'Integration map'}
-              title={product ? 'One product, every moving part' : 'Everything this platform talks to'}
-              intro={product ? 'The main technologies behind the product, around the app itself.' : 'The commerce platform in the middle, and the systems I connected it to around it.'} />
+            <SectionHead n={product ? 'How it fits together' : 'Integration map'} title={copy.title} intro={copy.intro} />
             <div data-reveal="">
-              <IntegrationMap center={product ? pj.title : pj.platform} sub={product ? pj.category : clientName(pj)} nodes={nodes} brandFor={brandFor} />
+              <IntegrationMap center={product ? pj.title : pj.platform} sub={product ? pj.category : clientName(pj)} nodes={nodes} brandFor={brandFor} variant={look.map} />
             </div>
           </div>
         </section>
@@ -188,7 +190,7 @@ function DeepSections({ study, details, pj }) {
         <section id="cs-architecture" className="cs-section cs-section--feature">
           <div className="cs-container cs-stack-sm">
             <SectionHead n='Architecture overview' title={arch.title} intro={arch.intro} />
-            <div className="cs-diagram-frame" data-reveal="">
+            <div className={`cs-diagram-frame cs-arch--${look.arch}`} data-reveal="">
               <div className="cs-diagram-scroll"><ArchitectureDiagram data={arch} id="arch" /></div>
             </div>
             {arch.callout && (
@@ -237,9 +239,9 @@ function DeepSections({ study, details, pj }) {
         <section id="cs-flow" className="cs-section cs-section--tint">
           <div className="cs-container cs-stack-sm">
             <SectionHead n={study.flow.label} title={study.flow.title} intro={study.flow.intro} />
-            <ol className="cs-flow" data-reveal="" style={{ '--n': study.flow.steps.length }}>
+            <ol className={`cs-flow cs-flow--${look.flow}`} data-reveal="" style={{ '--n': study.flow.steps.length }}>
               {study.flow.steps.map(([title, text], i) => (
-                <li key={title} className="cs-step" style={{ '--i': i }}>
+                <li key={title} className="cs-step" style={{ '--i': i }} data-n={String(i + 1).padStart(2, '0')}>
                   <span className="cs-step-n">Step {i + 1}</span>
                   <h3 className="cs-step-title">{title}</h3>
                   <p className="cs-step-text">{text}</p>
@@ -413,7 +415,7 @@ export default function CaseStudy({ project: pj }) {
   }, [pj, product]);
 
   return (
-    <main id="main" className="cs">
+    <main id="main" className="cs" style={{ '--pj-h': lookFor(pj.slug).hue, '--pj-l': `${lookFor(pj.slug).light}%` }}>
       <header className="cs-hero">
         <div className="aurora" aria-hidden="true"><i /><i /><i /></div>
         <div className="cs-container cs-hero-grid">
@@ -499,9 +501,7 @@ export default function CaseStudy({ project: pj }) {
                 <div className="pcard-top"><Place place={r.place} fallback={product ? 'My own product' : 'Remote client'} /><span className="num">{r.n}</span></div>
                 <span className="pcard-cat">{r.category}</span>
                 <h3><a href={caseStudyPath(r)} className="card-link">{clientName(r)}</a></h3>
-                {r.points
-                  ? <ul className="points">{r.points.map((pt) => <li key={pt}>{pt}</li>)}</ul>
-                  : <p>{r.desc}</p>}
+                {r.points ? <Points items={r.points} /> : <p>{r.desc}</p>}
                 {r.metrics
                   ? <div className="metric"><strong data-count="">{r.metrics[0].value}</strong><span>{r.metrics[0].label}</span></div>
                   : <div className="metric metric-plain"><span>{r.platform}</span></div>}

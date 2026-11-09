@@ -3,6 +3,7 @@ import { featuredExport, featuredFlow, featuredStats, projectFilters, projects }
 import { caseStudyPath, clientName } from '../lib/projects';
 import { track } from '../lib/analytics';
 import Place from '../components/Place';
+import Points from '../components/Points';
 import { MiniScene, sceneTitle } from '../components/ProjectScene';
 
 const FILTERS = [['all', 'All projects'], ...projectFilters];
@@ -102,7 +103,7 @@ export default function Projects() {
                   </div>
                   <h3><a href={caseStudyPath(pj)} className="card-link">{clientName(pj)}</a></h3>
                   <p className="wcard-line">{sceneTitle(pj.slug) || pj.alias}</p>
-                  {pj.points && <ul className="points">{pj.points.map((pt) => <li key={pt}>{pt}</li>)}</ul>}
+                  <Points items={pj.points} />
                   <div className="wcard-foot">
                     {pj.metrics
                       ? <span className="wcard-metric"><strong data-count="">{pj.metrics[0].value}</strong>{pj.metrics[0].label}</span>

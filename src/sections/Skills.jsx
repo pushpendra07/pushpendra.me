@@ -9,6 +9,9 @@ import { track } from '../lib/analytics';
 
 const learning = skills.find((s) => s.learning);
 const pad = (n) => String(n).padStart(2, '0');
+// One colour per step (light / dark theme), used for its number, label, dash and art panel.
+const TONES = [['#2563eb', '#7aa7ff'], ['#0f766e', '#5eead4'], ['#7c3aed', '#b9a2ff'], ['#c2410c', '#fdba74'], ['#be185d', '#f9a8d4'], ['#15803d', '#86efac'], ['#4f46e5', '#a5b4fc']];
+const tone = (i) => ({ '--c': TONES[i % TONES.length][0], '--c-dark': TONES[i % TONES.length][1] });
 
 function Scene({ id, chips }) {
   switch (id) {
@@ -206,9 +209,9 @@ export default function Skills() {
       <div className="sk-track" ref={trackRef} style={{ '--n': n }}>
         <div className="sk-stage wrap">
           {skillStory.map((s, i) => (
-            <article key={s.key} className="sk-step" data-on={stacked || i === active ? '' : undefined} aria-hidden={!stacked && i !== active ? true : undefined}>
+            <article key={s.key} className="sk-step" style={tone(i)} data-on={stacked || i === active ? '' : undefined} aria-hidden={!stacked && i !== active ? true : undefined}>
               <div className="sk-narr">
-                <span className="sk-label">{pad(i + 1)} · {s.label}</span>
+                <span className="sk-kicker"><span className="sk-num">{pad(i + 1)}</span><span className="sk-label">{s.label}</span></span>
                 <h3 className="sk-title">{s.title} <span className="accent">{s.accent}</span></h3>
                 <p className="sk-text">{s.text}</p>
               </div>
@@ -219,7 +222,7 @@ export default function Skills() {
             {skillStory.map((s, i) => (
               <button
                 key={s.key} type="button" role="tab" aria-selected={i === active}
-                aria-label={`${pad(i + 1)} ${s.label}`} className={i <= active ? 'on' : ''}
+                aria-label={`${pad(i + 1)} ${s.label}`} className={i <= active ? 'on' : ''} style={tone(i)}
                 onClick={() => goTo(i)}
               />
             ))}
