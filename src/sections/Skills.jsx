@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import BrandIcon from '../components/BrandIcon';
 import { skills, skillStory } from '../data/profile';
 import { track } from '../lib/analytics';
+import { scrollToHash } from '../lib/scroll';
 
 // Skills as a scroll story. On wide screens the stage sticks while the page scrolls past it:
 // the left side swaps the numbered step, the right side swaps the animated scene. On phones
@@ -232,9 +233,26 @@ export default function Skills() {
 
       {learning && (
         <div className="wrap sk-learning">
-          <span className="sk-label">Currently learning</span>
-          <div>{learning.items.map((it) => <span key={it} className="sk-chip">{it}</span>)}</div>
-          <p>{learning.note}</p>
+          {/* A card with a slowly turning gradient edge; the headline rolls through the topics. */}
+          <div className="learn" data-reveal="">
+            <span className="learn-kicker"><i className="learn-dot" />Currently learning</span>
+            <p className="learn-line">
+              <span className="learn-now">Now exploring</span>
+              <span className="learn-roll" aria-hidden="true" style={{ '--n': learning.items.length }}>
+                {learning.items.map((it, i) => <span key={it} style={{ '--i': i }}>{it}</span>)}
+              </span>
+            </p>
+            <ul className="learn-chips">
+              {learning.items.map((it, i) => (
+                <li key={it} style={{ '--i': i }}><i className="learn-spin" aria-hidden="true" />{it}</li>
+              ))}
+            </ul>
+            <div className="learn-proof">
+              <span className="learn-badge"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="currentColor" /></svg>Quick learner</span>
+              <p className="learn-note">{learning.note}</p>
+              <a href="#ai-builds" onClick={scrollToHash} className="learn-go">See what I built <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
         </div>
       )}
     </section>

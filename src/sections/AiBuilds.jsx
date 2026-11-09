@@ -1,15 +1,36 @@
 import { MiniScene, sceneTitle } from '../components/ProjectScene';
+import { useEffect, useRef } from 'react';
 import BrandIcon from '../components/BrandIcon';
 import { aiTools, products } from '../data/profile';
 import { caseStudyPath } from '../lib/projects';
+import { prefersReducedMotion } from '../hooks/useReducedMotion';
+
+// A soft light that follows the pointer across the product cards and toolkit tiles.
+function useSpotlight(ref) {
+  useEffect(() => {
+    const root = ref.current;
+    if (!root || prefersReducedMotion() || !window.matchMedia('(pointer: fine)').matches) return undefined;
+    const onMove = (e) => {
+      const el = e.target.closest?.('.rcard, .aitool');
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--sx', `${e.clientX - r.left}px`);
+      el.style.setProperty('--sy', `${e.clientY - r.top}px`);
+    };
+    root.addEventListener('pointermove', onMove, { passive: true });
+    return () => root.removeEventListener('pointermove', onMove);
+  }, [ref]);
+}
 
 // My own products, shown like results: the scene, the biggest number, then the product.
 export default function AiBuilds() {
+  const ref = useRef(null);
+  useSpotlight(ref);
   return (
-    <section id="ai-builds" className="section">
+    <section id="ai-builds" className="section ai-builds" ref={ref}>
       <div className="wrap">
         <span className="tag">AI builds · my own products</span>
-        <h2 className="h2" data-reveal="">Full products I built <span className="accent">with AI coding agents</span></h2>
+        <h2 className="h2" data-reveal="">Full products I built <span className="accent ai-shimmer">with AI coding agents</span></h2>
         <p className="sub" data-reveal="">
           Not client work. I set the product and the architecture, then reviewed and tested every module the
           agents wrote. Each one opens a full case study.
@@ -18,8 +39,8 @@ export default function AiBuilds() {
         <div className="aitools" data-reveal="">
           <p className="aitools-head"><b>My AI toolkit</b><span>{aiTools.length} tools · agents write, I own the architecture, review and tests</span></p>
           <ul className="aitools-grid">
-            {aiTools.map((t) => (
-              <li key={t.name} className={`aitool${t.brand === 'cursor' || t.brand === 'phpstorm' ? ' aitool--ink' : ''}`}>
+            {aiTools.map((t, i) => (
+              <li key={t.name} style={{ '--i': i }} className={`aitool${t.brand === 'cursor' || t.brand === 'phpstorm' ? ' aitool--ink' : ''}`}>
                 <span className={`aitool-mark${t.mono ? ' aitool-mono' : ''}`} aria-hidden="true">
                   {t.brand ? <BrandIcon name={t.brand} size={22} /> : t.mono}
                 </span>

@@ -9,8 +9,8 @@ const ROLE = {
   newrelic: 'Monitoring', fastly: 'CDN & caching', react: 'Storefronts', docker: 'Environments',
 };
 
-// Endless strip of the stack, right under the hero. Logos stay muted and light up in their
-// brand colour on hover. Two copies make the loop seamless.
+// Endless strip of the stack, right under the hero, logos in their brand colours.
+// Two copies make the loop seamless.
 export default function TechStrip() {
   const items = techStrip.map((k) => (
     <li key={k} className="stack-item">

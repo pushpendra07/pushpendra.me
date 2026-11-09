@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { featuredExport, featuredFlow, featuredStats, projectFilters, projects } from '../data/profile';
+import { featuredConnects, featuredFlow, featuredSummary, projectFilters, projects } from '../data/profile';
 import { caseStudyPath, clientName } from '../lib/projects';
 import { track } from '../lib/analytics';
 import Place from '../components/Place';
+import BrandIcon from '../components/BrandIcon';
 import Points from '../components/Points';
 import { MiniScene, sceneTitle } from '../components/ProjectScene';
 
@@ -45,36 +46,35 @@ export default function Projects() {
 
         <article className="feat" hidden={!shown(feat)} data-reveal="">
           <div className="feat-text">
-            <Place place={`${feat.place} · ${feat.platform}`} />
-            <span className="badge">Featured project</span>
+            <div className="feat-meta">
+              <span className="badge">Featured project</span>
+              <Place place={`${feat.place} · ${feat.platform}`} />
+            </div>
             <h3>
               {/* Stretched link: the whole card opens the case study. */}
               <a href={caseStudyPath(feat)} className="card-link">{clientName(feat)}</a>
             </h3>
-            <p>{feat.desc}</p>
-            <div className="feat-stats">
-              {featuredStats.map((s) => (
-                <div key={s.kicker} className="stat-tile">
-                  <span className="kicker">{s.kicker}</span>
-                  <strong data-count="">{s.value}</strong>
-                  <span>{s.label}</span>
-                </div>
-              ))}
-              <div className="stat-tile stat-wide">
-                <div>
-                  <span className="kicker">{featuredExport.kicker}</span>
-                  <strong>{featuredExport.value}</strong>
-                  <span>{featuredExport.label}</span>
-                </div>
-                <dl className="before-after">
-                  <div><dt>Before</dt><dd><i className="bar bar-bad" /><b className="bad">{featuredExport.before}</b></dd></div>
-                  <div><dt>After</dt><dd><i className="bar bar-good" /><b className="good">{featuredExport.after}</b></dd></div>
-                </dl>
-              </div>
+            <p className="feat-summary">{featuredSummary}</p>
+
+            <div className="feat-built">
+              <span className="kicker">What I built</span>
+              <Points items={feat.points} />
             </div>
-            <ul className="chips" aria-label="Technologies">
-              {feat.tags.map((t) => <li key={t}>{t}</li>)}
-            </ul>
+
+            <div className="feat-connects">
+              <span className="kicker">What it connects</span>
+              <ul>
+                {featuredConnects.map((c) => (
+                  <li key={c.name}>
+                    <span className={`fc-mark${c.mono ? ' fc-mono' : ''}`} aria-hidden="true">
+                      {c.brand ? <BrandIcon name={c.brand} size={18} /> : c.mono}
+                    </span>
+                    <span className="fc-text"><b>{c.name}</b><small>{c.role}</small></span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
             <span className="go" aria-hidden="true">Read the full case study →</span>
           </div>
           <div className="flow" aria-label="How one order moves through the platform">
