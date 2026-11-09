@@ -2,13 +2,28 @@ import BrandIcon from '../components/BrandIcon';
 import { brands } from '../data/brands';
 import { techStrip } from '../data/profile';
 
-// Endless strip of the main tools, right under the hero. Two copies make the loop seamless.
+// What each tool does in the stores I build, shown under its name.
+const ROLE = {
+  adobe: 'Commerce cloud', magento: 'Platform', php: 'Language', graphql: 'Headless APIs',
+  rabbitmq: 'Message queues', sap: 'ERP', redis: 'Cache & sessions', mysql: 'Database',
+  newrelic: 'Monitoring', fastly: 'CDN & caching', react: 'Storefronts', docker: 'Environments',
+};
+
+// Endless strip of the stack, right under the hero. Logos stay muted and light up in their
+// brand colour on hover. Two copies make the loop seamless.
 export default function TechStrip() {
-  const items = techStrip.map((k) => <li key={k}><BrandIcon name={k} size={22} />{brands[k].title}</li>);
+  const items = techStrip.map((k) => (
+    <li key={k} className="stack-item">
+      <span className="stack-mark"><BrandIcon name={k} size={24} /></span>
+      <span className="stack-text"><b>{brands[k].title}</b><small>{ROLE[k]}</small></span>
+    </li>
+  ));
   return (
-    <section className="tech-strip" aria-label="Technologies I ship with">
-      <p className="tech-label">Shipping with</p>
-      <div className="marquee">
+    <section className="tech-strip" aria-label="The stack I ship with">
+      <div className="wrap">
+        <p className="stack-label"><span>The stack behind the stores</span></p>
+      </div>
+      <div className="marquee stack-marquee">
         <ul className="marquee-track">{items}</ul>
         <ul className="marquee-track" aria-hidden="true">{items}</ul>
       </div>

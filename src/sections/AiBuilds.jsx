@@ -1,5 +1,6 @@
 import { MiniScene, sceneTitle } from '../components/ProjectScene';
-import { products } from '../data/profile';
+import BrandIcon from '../components/BrandIcon';
+import { aiTools, products } from '../data/profile';
 import { caseStudyPath } from '../lib/projects';
 
 // My own products, shown like results: the scene, the biggest number, then the product.
@@ -13,6 +14,22 @@ export default function AiBuilds() {
           Not client work. I set the product and the architecture, then reviewed and tested every module the
           agents wrote. Each one opens a full case study.
         </p>
+
+        <div className="aitools" data-reveal="">
+          <p className="aitools-head"><b>My AI toolkit</b><span>{aiTools.length} tools · agents write, I own the architecture, review and tests</span></p>
+          <ul className="aitools-grid">
+            {aiTools.map((t) => (
+              <li key={t.name} className={`aitool${t.brand === 'cursor' || t.brand === 'phpstorm' ? ' aitool--ink' : ''}`}>
+                <span className={`aitool-mark${t.mono ? ' aitool-mono' : ''}`} aria-hidden="true">
+                  {t.brand ? <BrandIcon name={t.brand} size={22} /> : t.mono}
+                </span>
+                <span className="aitool-name"><b>{t.name}</b><small>{t.maker}</small></span>
+                <em className="aitool-role">{t.role}</em>
+                <p>{t.use}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <div className="rgrid">
           {products.map((pj, i) => {
