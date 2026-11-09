@@ -1,7 +1,7 @@
 // Post-build step: writes the crawler and AI files into dist/ from the same data the pages use,
 // so they never drift from the site. Run by `npm run build` after the pre-render.
 //   robots.txt                 search and AI crawler rules, sitemap location
-//   sitemap.xml                every page with its last-modified date and share image
+//   sitemap.xml                every indexable page with its share image
 //   llms.txt                   short site summary for AI assistants (llmstxt.org)
 //   llms-full.txt              the whole profile and every case study as plain text
 //   humans.txt                 who made the site (humanstxt.org)
@@ -44,7 +44,6 @@ write('robots.txt', [
   '',
   'User-agent: *',
   'Allow: /',
-  'Disallow: /404.html',
   '',
   '# AI search and assistant crawlers, named explicitly so the intent is unambiguous.',
   ...aiBots.map((b) => `User-agent: ${b}`),
@@ -60,7 +59,6 @@ write('sitemap.xml', [
   ...pages.map((p) => [
     '  <url>',
     `    <loc>${SITE}${p.path}</loc>`,
-    `    <lastmod>${today}</lastmod>`,
     ...[p.image, ...(p.extra || [])].map((img) => `    <image:image><image:loc>${xml(img)}</image:loc></image:image>`),
     '  </url>',
   ].join('\n')),

@@ -11,11 +11,14 @@ const dist = resolve('dist');
 const ssrDir = resolve('dist-ssr');
 const { render, caseStudies, homeJsonLd } = await import(pathToFileURL(resolve(ssrDir, 'entry-server.js')).href);
 
-let template = readFileSync(resolve(dist, 'index.html'), 'utf8');
-template = template.replace(/<link rel="stylesheet"[^>]*href="(\/assets\/[^"]+\.css)"[^>]*>/, (_, href) => {
-  const css = readFileSync(resolve(dist, `.${href}`), 'utf8');
-  return `<style>${css}</style>`;
-});
+const template = readFileSync(resolve(dist, 'index.html'), 'utf8');
+const cssLink = /<link rel="stylesheet"[^>]*href="(\/assets\/[^"]+\.css)"[^>]*>/;
+const cssHref = template.match(cssLink)?.[1];
+if (!cssHref) throw new Error('prerender: built stylesheet missing');
+const css = readFileSync(resolve(dist, `.${cssHref}`), 'utf8');
+const caseOnly = /\/\*! case-study-css:start \*\/[\s\S]*?\/\*! case-study-css:end \*\//;
+if (!caseOnly.test(css)) throw new Error('prerender: case-study CSS markers missing');
+const withCss = (html, styles) => html.replace(cssLink, () => `<style>${styles}</style>`);
 
 // Inline scripts (the Google tag) are allowed by hash in the CSP in public/_headers.
 const headers = readFileSync(resolve('public/_headers'), 'utf8');
@@ -39,22 +42,22 @@ const attr = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</
 function withHead(html, { path, title, description, image }) {
   const url = `${SITE}${path}`;
   const swaps = [
-    [/<title>[^<]*<\/title>/, `<title>${attr(title)}</title>`],
-    [/(<meta name="description" content=")[^"]*/, `$1${attr(description)}`],
-    [/(<link rel="canonical" href=")[^"]*/, `$1${url}`],
-    [/(<meta property="og:url" content=")[^"]*/, `$1${url}`],
-    [/(<meta property="og:title" content=")[^"]*/, `$1${attr(title)}`],
-    [/(<meta property="og:description" content=")[^"]*/, `$1${attr(description)}`],
-    [/(<meta property="og:type" content=")[^"]*/, '$1article'],
-    [/(<meta property="og:image" content=")[^"]*/, `$1${image}`],
-    [/(<meta property="og:image:width" content=")[^"]*/, '$11200'],
-    [/(<meta property="og:image:height" content=")[^"]*/, '$1630'],
-    [/(<meta property="og:image:alt" content=")[^"]*/, `$1${attr(title)}`],
-    [/(<meta name="twitter:card" content=")[^"]*/, '$1summary_large_image'],
+    [/(<title>)[^<]*/, attr(title)],
+    [/(<meta name="description" content=")[^"]*/, attr(description)],
+    [/(<link rel="canonical" href=")[^"]*/, url],
+    [/(<meta property="og:url" content=")[^"]*/, url],
+    [/(<meta property="og:title" content=")[^"]*/, attr(title)],
+    [/(<meta property="og:description" content=")[^"]*/, attr(description)],
+    [/(<meta property="og:type" content=")[^"]*/, 'article'],
+    [/(<meta property="og:image" content=")[^"]*/, image],
+    [/(<meta property="og:image:alt" content=")[^"]*/, attr(title)],
+    [/(<meta name="twitter:title" content=")[^"]*/, attr(title)],
+    [/(<meta name="twitter:description" content=")[^"]*/, attr(description)],
+    [/(<meta name="twitter:image" content=")[^"]*/, image],
   ];
   return swaps.reduce((out, [re, to]) => {
     if (!re.test(out)) throw new Error(`prerender: ${re} not found in index.html`);
-    return out.replace(re, to);
+    return out.replace(re, (_, prefix) => prefix + to);
   }, html);
 }
 
@@ -72,8 +75,8 @@ function write(path, html, data) {
   writeFileSync(resolve(dir, 'index.html'), page);
 }
 
-write('/', template, homeJsonLd);
-for (const page of caseStudies) write(page.path, withHead(template, page), page.jsonLd);
+write('/', withCss(template, css.replace(caseOnly, '')), homeJsonLd);
+for (const page of caseStudies) write(page.path, withCss(withHead(template, page), css), page.jsonLd);
 
 rmSync(ssrDir, { recursive: true, force: true });
 console.log(`prerendered ${1 + caseStudies.length} pages`);

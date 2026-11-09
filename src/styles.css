@@ -438,6 +438,7 @@ main section[id] { scroll-margin-top: 72px; }
 .to-top.is-visible { opacity: 1; transform: none; pointer-events: auto; }
 .to-top:hover { color: var(--accent-ink); }
 
+/*! case-study-css:start */
 /* ---------- Case study pages (tokens shared with the home page) ---------- */
 .cs-container { max-width: 1080px; margin: 0 auto; }
 .cs-hero { padding: 56px 24px 64px; }
@@ -716,6 +717,8 @@ main section[id] { scroll-margin-top: 72px; }
 .cs-shot figcaption { padding: 12px 16px; font-size: 14px; line-height: 20px; color: var(--fg-2); }
 
 .cs-head .cs-intro { margin-top: 12px; }
+
+/*! case-study-css:end */
 
 /* ---------- Alive layer: motion that costs nothing to load (transform and opacity only) ---------- */
 .hero { position: relative; isolation: isolate; overflow: hidden; }

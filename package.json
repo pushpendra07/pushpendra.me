@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.js && node scripts/seo-files.mjs",
     "preview": "vite preview",
-    "og": "node scripts/og-cards.mjs"
+    "og": "node scripts/og-cards.mjs",
+    "seo:audit": "python3 -B scripts/seo-audit.py",
+    "seo:validate": "npm run seo:audit",
+    "seo:lighthouse": "python3 -B scripts/seo-lighthouse.py"
   },
   "dependencies": {
     "react": "^18.3.1",

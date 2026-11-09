@@ -5,9 +5,13 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 18
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -16,3 +20,17 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - name: Validate production SEO and links
+        run: npm run seo:validate
+      - name: Collect advisory Lighthouse metrics
+        continue-on-error: true
+        timeout-minutes: 12
+        run: npm run seo:lighthouse
+      - name: Upload SEO and performance reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-reports
+          path: seo-reports/
+          retention-days: 14
+          if-no-files-found: ignore
