@@ -777,6 +777,7 @@ main section[id] { scroll-margin-top: 72px; }
 .pcard:hover::before, .wcard:hover .wcard-body::before, .rcard:hover .rcard-body::before, .feat:hover::before, .steps li:hover::before { opacity: 1; }
 .steps li { position: relative; }
 .pcard > *, .steps li > *, .feat-text > * { position: relative; }
+.feat-text > h3, .pcard > h3 { position: static; }
 .feat::before { z-index: 2; mix-blend-mode: soft-light; }
 :root[data-theme="light"] .feat::before { mix-blend-mode: multiply; }
 
