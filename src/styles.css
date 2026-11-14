@@ -1551,8 +1551,10 @@ main section[id] { scroll-margin-top: 72px; }
 .wcard-art::after { content: ''; position: absolute; inset: auto 0 0; height: 56px; background: linear-gradient(transparent, rgba(0, 0, 0, .28)); pointer-events: none; }
 .wcard-art .mini { transition: transform .8s var(--ease); transform-origin: 50% 0; }
 .wcard:hover .wcard-art .mini { transform: scale(1.04); }
-.wcard-body { position: relative; flex: 1; display: flex; flex-direction: column; gap: 10px; padding: 24px 28px 26px; }
+.wcard-body { flex: 1; display: flex; flex-direction: column; gap: 10px; padding: 24px 28px 26px; }
 .wcard-body > * { position: relative; }
+/* Let the stretched link use the card as its containing block. */
+.wcard-body > h3 { position: static; }
 .wcard-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 14px; }
 .wcard-cat { font: 500 11px/1.4 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent-ink); }
 .wcard h3 { margin: 4px 0 0; font: 600 28px/1.08 var(--font-display); letter-spacing: -.035em; }
@@ -1580,8 +1582,9 @@ main section[id] { scroll-margin-top: 72px; }
   font: 500 11px/1.3 var(--font-mono); letter-spacing: .06em; color: #fff;
   background: rgba(255, 255, 255, .16); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28); backdrop-filter: blur(8px);
 }
-.rcard-body { position: relative; flex: 1; display: flex; flex-direction: column; gap: 14px; padding: 26px 28px 24px; }
+.rcard-body { flex: 1; display: flex; flex-direction: column; gap: 14px; padding: 26px 28px 24px; }
 .rcard-body > * { position: relative; }
+.rcard-body > .rcard-foot { position: static; }
 .rcard-claim { margin: 0; font: 600 26px/1.15 var(--font-display); letter-spacing: -.03em; color: var(--text); }
 .rcard-claim strong { display: block; font-size: 56px; line-height: .95; letter-spacing: -.055em; background: linear-gradient(135deg, var(--accent), #ff6a3d); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .rcard-quote { margin: 0; font-size: 15px; line-height: 1.6; color: var(--fg-2); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
